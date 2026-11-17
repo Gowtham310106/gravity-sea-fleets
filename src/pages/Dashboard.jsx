@@ -127,11 +127,9 @@ export default function Dashboard({
     if (!vesselForm.name.trim()) return;
 
     if (editingVessel) {
-      // Update
       setVessels(prev => prev.map(item => item.id === editingVessel.id ? { ...item, ...vesselForm, updatedAt: new Date().toISOString() } : item));
       logAudit('VESSEL_UPDATE', `Vessel: ${vesselForm.name}`, `Updated technical particulars and configuration for ${vesselForm.name}`);
     } else {
-      // Create
       const newId = `GSF-VES-00${vessels.length + 1}`;
       const newVessel = {
         ...vesselForm,
@@ -180,7 +178,6 @@ export default function Dashboard({
     }
   };
 
-  // Enquiry status change handler
   const handleUpdateEnquiryStatus = (enquiryId, newStatus) => {
     if (!canManageEnquiry) return;
     setEnquiries(prev => prev.map(e => e.id === enquiryId ? { ...e, status: newStatus } : e));
@@ -190,7 +187,6 @@ export default function Dashboard({
     logAudit('ENQUIRY_STATUS_UPDATE', `Enquiry: ${enquiryId}`, `Status changed to ${newStatus}`);
   };
 
-  // Add internal note
   const handleAddInternalNote = () => {
     if (!newInternalNote.trim() || !selectedEnquiry) return;
     const updatedNotes = selectedEnquiry.internalNotes 
@@ -203,7 +199,6 @@ export default function Dashboard({
     logAudit('ENQUIRY_NOTE_ADDED', `Enquiry: ${selectedEnquiry.id}`, 'Added private commercial superintendent note');
   };
 
-  // CSV Export Handlers
   const handleExportVessels = () => {
     const headers = "ID,Name,Type,DWT,BuiltYear,Flag,IMO,Classification,AvailabilityStatus,PublicationStatus\n";
     const rows = vessels.map(v => `"${v.id}","${v.name}","${v.type}",${v.dwt},${v.builtYear},"${v.flag}","${v.imoNumber}","${v.classification}","${v.availabilityStatus}","${v.publicationStatus}"`).join("\n");
@@ -232,7 +227,6 @@ export default function Dashboard({
     logAudit('DATA_EXPORT', 'Commercial Enquiries', 'Exported commercial enquiry database to CSV format');
   };
 
-  // Filtered views
   const filteredVessels = vessels.filter(v => {
     if (vesselStatusFilter !== 'ALL' && v.publicationStatus !== vesselStatusFilter) return false;
     if (vesselSearch.trim()) {
@@ -251,801 +245,797 @@ export default function Dashboard({
     return true;
   });
 
-  // Overview Counts
   const publishedCount = vessels.filter(v => v.publicationStatus === 'Published').length;
-  const draftCount = vessels.filter(v => v.publicationStatus === 'Draft').length;
   const newEnquiriesCount = enquiries.filter(e => e.status === 'New').length;
   const qualifiedEnquiriesCount = enquiries.filter(e => e.status === 'Qualified').length;
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
+    <div className="bg-[#F8F9FA] min-h-screen">
       
-      {/* Top Identity & Role Switcher Bar */}
-      <div className="bg-slate-900 border border-slate-800 p-5 rounded-2xl flex flex-col md:flex-row items-center justify-between gap-4 shadow-xl">
-        <div className="flex items-center gap-3 w-full md:w-auto">
-          <div className="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-400">
-            <SlidersHorizontal className="w-5 h-5" />
+      {/* Top Operations Header Bar */}
+      <div className="bg-[#0A192F] text-white border-b border-slate-800">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded bg-slate-900 border border-slate-800 text-[#C5A880] flex items-center justify-center">
+              <SlidersHorizontal className="w-5 h-5" />
+            </div>
+            <div>
+              <h1 className="font-serif-maritime text-xl font-bold tracking-tight text-white">
+                Operations & Management Portal
+              </h1>
+              <p className="text-xs text-slate-400">
+                Authorised Personnel Interface • Fleet Register & Commercial RFPs
+              </p>
+            </div>
           </div>
-          <div>
-            <h1 className="text-xl font-bold text-white tracking-wide">
-              Operations & Management Dashboard
-            </h1>
-            <p className="text-xs text-slate-400">
-              Internal Corporate Release 1 • Authorised Personnel Interface
-            </p>
+
+          {/* RBAC Role Switcher */}
+          <div className="flex items-center gap-3 self-end md:self-auto">
+            <div className="text-xs text-slate-400 flex items-center gap-1.5">
+              <UserCheck className="w-4 h-4 text-[#C5A880]" />
+              <span>Simulate Role:</span>
+            </div>
+            <select
+              value={currentRole}
+              onChange={e => {
+                setCurrentRole(e.target.value);
+                logAudit('ROLE_SWITCH', 'Auth Context', `Switched active role to ${e.target.value}`);
+              }}
+              className="px-3 py-1.5 rounded bg-slate-900 border border-slate-700 text-xs font-semibold text-[#C5A880] focus:outline-none focus:border-[#C5A880]"
+            >
+              <option value="Administrator">Administrator (Full Access)</option>
+              <option value="Fleet Publisher">Fleet Editor & Publisher</option>
+              <option value="Commercial Manager">Commercial Enquiry Manager</option>
+              <option value="Viewer">Read-Only Viewer</option>
+            </select>
           </div>
         </div>
 
-        {/* Demo Role Switcher (RBAC) */}
-        <div className="flex items-center gap-3 w-full md:w-auto justify-end">
-          <div className="text-xs text-slate-400 flex items-center gap-1.5">
-            <UserCheck className="w-4 h-4 text-cyan-400" />
-            <span>Active Role:</span>
-          </div>
-          <select
-            value={currentRole}
-            onChange={e => {
-              setCurrentRole(e.target.value);
-              logAudit('ROLE_SWITCH', 'Auth Context', `Switched active role to ${e.target.value}`);
-            }}
-            className="px-3 py-1.5 rounded-lg bg-slate-950 border border-amber-500/40 text-xs font-semibold text-amber-300 focus:outline-none focus:border-amber-400"
-          >
-            <option value="Administrator">Administrator (Full Access)</option>
-            <option value="Fleet Publisher">Fleet Editor & Publisher</option>
-            <option value="Commercial Manager">Commercial Enquiry Manager</option>
-            <option value="Viewer">Read-Only Viewer</option>
-          </select>
+        {/* Tab Navigation Strip */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center gap-2 overflow-x-auto">
+          {[
+            { id: 'overview', label: 'Overview & Telemetry', count: null },
+            { id: 'vessels', label: 'Fleet Register (CRUD)', count: vessels.length },
+            { id: 'enquiries', label: 'Commercial Inquiries', count: enquiries.length },
+            { id: 'audit', label: 'System Audit History', count: auditLogs.length }
+          ].map(tab => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`px-4 py-3 text-xs font-semibold uppercase tracking-wider transition-all border-b-2 flex items-center gap-2 whitespace-nowrap ${
+                activeTab === tab.id
+                  ? 'border-[#C5A880] text-[#C5A880] bg-slate-900/60'
+                  : 'border-transparent text-slate-400 hover:text-white hover:bg-slate-900/30'
+              }`}
+            >
+              <span>{tab.label}</span>
+              {tab.count !== null && (
+                <span className="px-1.5 py-0.5 rounded text-[10px] bg-slate-800 text-slate-300 font-specs">
+                  {tab.count}
+                </span>
+              )}
+            </button>
+          ))}
         </div>
       </div>
 
-      {/* Main Navigation Tabs */}
-      <div className="border-b border-slate-800 flex items-center gap-2">
-        {[
-          { id: 'overview', label: 'Overview & Telemetry', count: null },
-          { id: 'vessels', label: 'Fleet Register (CRUD)', count: vessels.length },
-          { id: 'enquiries', label: 'Commercial Inquiries', count: enquiries.length },
-          { id: 'audit', label: 'System Audit History', count: auditLogs.length }
-        ].map(tab => (
-          <button
-            key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
-            className={`px-4 py-3 text-xs font-semibold rounded-t-xl transition-all border-b-2 flex items-center gap-2 ${
-              activeTab === tab.id
-                ? 'border-cyan-400 text-cyan-300 bg-slate-900/90'
-                : 'border-transparent text-slate-400 hover:text-slate-200 hover:bg-slate-900/40'
-            }`}
-          >
-            <span>{tab.label}</span>
-            {tab.count !== null && (
-              <span className="px-1.5 py-0.5 rounded-full text-[10px] bg-slate-800 text-slate-300 font-specs">
-                {tab.count}
-              </span>
-            )}
-          </button>
-        ))}
-      </div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
 
-      {/* TAB 1: OVERVIEW & TELEMETRY */}
-      {activeTab === 'overview' && (
-        <div className="space-y-8 animate-fadeIn">
-          {/* Key Metric Counters */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="bg-slate-900 border border-slate-800 p-5 rounded-2xl">
-              <span className="text-xs text-slate-400 font-medium block">Published Vessels</span>
-              <strong className="text-2xl font-specs font-bold text-white mt-1 block">
-                {publishedCount} <span className="text-xs text-slate-500 font-normal">/ {vessels.length} Total</span>
-              </strong>
-              <span className="text-[11px] text-emerald-400 mt-1 block">Publicly Discoverable</span>
+        {/* TAB 1: OVERVIEW & TELEMETRY */}
+        {activeTab === 'overview' && (
+          <div className="space-y-8">
+            {/* Key Metric Counters */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+              <div className="bg-white border border-slate-200 p-6 rounded shadow-sm">
+                <span className="text-xs text-slate-500 font-medium block uppercase tracking-wider">Published Vessels</span>
+                <strong className="text-3xl font-specs font-bold text-[#0A192F] mt-2 block">
+                  {publishedCount} <span className="text-xs text-slate-400 font-normal">/ {vessels.length} Total</span>
+                </strong>
+                <span className="text-[11px] text-emerald-700 font-medium mt-1 block">Live on Public Register</span>
+              </div>
+
+              <div className="bg-white border border-slate-200 p-6 rounded shadow-sm">
+                <span className="text-xs text-slate-500 font-medium block uppercase tracking-wider">Draft / Unpublished</span>
+                <strong className="text-3xl font-specs font-bold text-amber-700 mt-2 block">
+                  {vessels.length - publishedCount}
+                </strong>
+                <span className="text-[11px] text-slate-500 mt-1 block">Under Internal Review</span>
+              </div>
+
+              <div className="bg-white border border-slate-200 p-6 rounded shadow-sm">
+                <span className="text-xs text-slate-500 font-medium block uppercase tracking-wider">New Inbound Inquiries</span>
+                <strong className="text-3xl font-specs font-bold text-[#0A192F] mt-2 block">
+                  {newEnquiriesCount}
+                </strong>
+                <span className="text-[11px] text-[#9A7B4F] font-semibold mt-1 block">Requires Commercial Action</span>
+              </div>
+
+              <div className="bg-white border border-slate-200 p-6 rounded shadow-sm">
+                <span className="text-xs text-slate-500 font-medium block uppercase tracking-wider">Qualified RFPs</span>
+                <strong className="text-3xl font-specs font-bold text-emerald-700 mt-2 block">
+                  {qualifiedEnquiriesCount}
+                </strong>
+                <span className="text-[11px] text-slate-500 mt-1 block">Fixture Negotiations</span>
+              </div>
             </div>
 
-            <div className="bg-slate-900 border border-slate-800 p-5 rounded-2xl">
-              <span className="text-xs text-slate-400 font-medium block">Draft / Unpublished</span>
-              <strong className="text-2xl font-specs font-bold text-amber-400 mt-1 block">
-                {vessels.length - publishedCount}
-              </strong>
-              <span className="text-[11px] text-slate-400 mt-1 block">Internal Review</span>
+            {/* Quick Actions Bar */}
+            <div className="bg-white border border-slate-200 p-5 rounded shadow-sm flex flex-wrap items-center justify-between gap-4">
+              <div className="text-xs font-semibold text-[#0A192F] uppercase tracking-wider">
+                Management Commands:
+              </div>
+              <div className="flex flex-wrap items-center gap-3">
+                {canEditVessel && (
+                  <button
+                    onClick={handleOpenAddVessel}
+                    className="px-4 py-2 bg-[#0A192F] hover:bg-[#142D4C] text-white text-xs font-semibold rounded flex items-center gap-1.5 transition-colors shadow"
+                  >
+                    <Plus className="w-4 h-4 text-[#C5A880]" />
+                    <span>Create Vessel Record</span>
+                  </button>
+                )}
+                {canExport && (
+                  <>
+                    <button
+                      onClick={handleExportVessels}
+                      className="px-3.5 py-2 bg-[#F8F9FA] hover:bg-slate-100 text-[#0A192F] text-xs font-semibold rounded flex items-center gap-1.5 transition-colors border border-slate-200"
+                    >
+                      <Download className="w-3.5 h-3.5 text-slate-500" />
+                      <span>Export Fleet CSV</span>
+                    </button>
+                    <button
+                      onClick={handleExportEnquiries}
+                      className="px-3.5 py-2 bg-[#F8F9FA] hover:bg-slate-100 text-[#0A192F] text-xs font-semibold rounded flex items-center gap-1.5 transition-colors border border-slate-200"
+                    >
+                      <Download className="w-3.5 h-3.5 text-slate-500" />
+                      <span>Export Inquiries CSV</span>
+                    </button>
+                  </>
+                )}
+              </div>
             </div>
 
-            <div className="bg-slate-900 border border-slate-800 p-5 rounded-2xl">
-              <span className="text-xs text-slate-400 font-medium block">New Inbound Enquiries</span>
-              <strong className="text-2xl font-specs font-bold text-cyan-400 mt-1 block">
-                {newEnquiriesCount}
-              </strong>
-              <span className="text-[11px] text-cyan-300 mt-1 block">Requires Commercial Action</span>
-            </div>
+            {/* Two Columns: Recent Inquiries & Recent Audit */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              
+              {/* Recent Inquiries */}
+              <div className="bg-white border border-slate-200 rounded p-6 shadow-sm space-y-4">
+                <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                  <h3 className="font-serif-maritime font-bold text-[#0A192F] text-base">Recent Commercial Inquiries</h3>
+                  <button
+                    onClick={() => setActiveTab('enquiries')}
+                    className="text-xs text-[#9A7B4F] hover:text-[#0A192F] font-semibold"
+                  >
+                    View All ({enquiries.length})
+                  </button>
+                </div>
 
-            <div className="bg-slate-900 border border-slate-800 p-5 rounded-2xl">
-              <span className="text-xs text-slate-400 font-medium block">Qualified RFPs</span>
-              <strong className="text-2xl font-specs font-bold text-emerald-400 mt-1 block">
-                {qualifiedEnquiriesCount}
-              </strong>
-              <span className="text-[11px] text-slate-400 mt-1 block">High Probability Fixtures</span>
+                <div className="space-y-3">
+                  {enquiries.slice(0, 4).map(e => (
+                    <div 
+                      key={e.id}
+                      onClick={() => {
+                        setSelectedEnquiry(e);
+                        setActiveTab('enquiries');
+                      }}
+                      className="p-4 rounded border border-slate-200 hover:border-[#C5A880] transition-colors cursor-pointer space-y-2 bg-[#F8F9FA]"
+                    >
+                      <div className="flex items-center justify-between text-xs">
+                        <span className="font-specs font-bold text-[#0A192F]">{e.id}</span>
+                        <span className={`px-2 py-0.5 rounded text-[10px] font-specs uppercase font-semibold ${
+                          e.status === 'New' ? 'bg-[#FAF5EE] text-[#9A7B4F] border border-[#E8DCC8]' :
+                          e.status === 'Qualified' ? 'bg-emerald-50 text-emerald-800 border border-emerald-200' :
+                          'bg-slate-100 text-slate-700'
+                        }`}>
+                          {e.status}
+                        </span>
+                      </div>
+                      <div className="text-xs font-bold text-[#0A192F]">
+                        {e.company} — <span className="font-normal text-slate-600">{e.contactName}</span>
+                      </div>
+                      <div className="text-[11px] text-slate-500 flex items-center justify-between">
+                        <span>{e.enquiryType} {e.vesselName ? `• ${e.vesselName}` : ''}</span>
+                        <span className="font-specs">{new Date(e.createdAt).toLocaleDateString()}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Audit Snapshot */}
+              <div className="bg-white border border-slate-200 rounded p-6 shadow-sm space-y-4">
+                <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                  <h3 className="font-serif-maritime font-bold text-[#0A192F] text-base">Operational Audit Trail</h3>
+                  <button
+                    onClick={() => setActiveTab('audit')}
+                    className="text-xs text-[#9A7B4F] hover:text-[#0A192F] font-semibold"
+                  >
+                    View Full Trail ({auditLogs.length})
+                  </button>
+                </div>
+
+                <div className="space-y-3">
+                  {auditLogs.slice(0, 4).map(log => (
+                    <div key={log.id} className="p-3.5 rounded border border-slate-200 bg-[#F8F9FA] text-xs space-y-1">
+                      <div className="flex items-center justify-between text-[11px]">
+                        <span className="font-specs font-bold text-[#9A7B4F]">{log.action}</span>
+                        <span className="font-specs text-slate-400">{new Date(log.timestamp).toLocaleTimeString()}</span>
+                      </div>
+                      <div className="text-[#0A192F] font-semibold">{log.entity}</div>
+                      <div className="text-[11px] text-slate-600 line-clamp-1">{log.summary}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
             </div>
           </div>
+        )}
 
-          {/* Quick Action Hub */}
-          <div className="bg-slate-900/60 border border-slate-800 p-5 rounded-2xl flex flex-wrap items-center justify-between gap-4">
-            <div className="text-xs text-slate-300 font-semibold">
-              Operational Actions:
-            </div>
-            <div className="flex flex-wrap items-center gap-3">
+        {/* TAB 2: FLEET REGISTER (CRUD) */}
+        {activeTab === 'vessels' && (
+          <div className="space-y-6">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-white p-4 rounded border border-slate-200 shadow-sm">
+              <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
+                <div className="relative flex-1 sm:w-72">
+                  <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
+                  <input
+                    type="text"
+                    placeholder="Search fleet records..."
+                    value={vesselSearch}
+                    onChange={e => setVesselSearch(e.target.value)}
+                    className="w-full pl-9 pr-3 py-1.5 rounded border border-slate-300 text-xs text-[#0A192F] placeholder-slate-400 focus:outline-none focus:border-[#0A192F]"
+                  />
+                </div>
+
+                <select
+                  value={vesselStatusFilter}
+                  onChange={e => setVesselStatusFilter(e.target.value)}
+                  className="px-3 py-1.5 rounded border border-slate-300 text-xs text-[#0A192F] bg-white focus:outline-none"
+                >
+                  <option value="ALL">All Publication States</option>
+                  <option value="Published">Published (Public)</option>
+                  <option value="Draft">Draft (Internal)</option>
+                  <option value="Unpublished">Unpublished</option>
+                  <option value="Archived">Archived</option>
+                </select>
+              </div>
+
               {canEditVessel && (
                 <button
                   onClick={handleOpenAddVessel}
-                  className="px-3.5 py-2 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-semibold flex items-center gap-1.5 transition-colors"
+                  className="w-full sm:w-auto px-4 py-2 rounded bg-[#0A192F] hover:bg-[#142D4C] text-white font-semibold text-xs flex items-center justify-center gap-1.5 transition-colors shadow"
                 >
-                  <Plus className="w-4 h-4" />
-                  <span>Add New Vessel Record</span>
+                  <Plus className="w-4 h-4 text-[#C5A880]" />
+                  <span>Create Vessel Record</span>
                 </button>
               )}
-              {canExport && (
-                <>
-                  <button
-                    onClick={handleExportVessels}
-                    className="px-3.5 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold flex items-center gap-1.5 transition-colors border border-slate-700"
-                  >
-                    <Download className="w-3.5 h-3.5" />
-                    <span>Export Fleet CSV</span>
-                  </button>
-                  <button
-                    onClick={handleExportEnquiries}
-                    className="px-3.5 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold flex items-center gap-1.5 transition-colors border border-slate-700"
-                  >
-                    <Download className="w-3.5 h-3.5" />
-                    <span>Export Enquiries CSV</span>
-                  </button>
-                </>
-              )}
-            </div>
-          </div>
-
-          {/* Two Columns: Recent Commercial Leads & Recent Changes */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            
-            {/* Recent Enquiries */}
-            <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
-              <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-                <h3 className="font-bold text-white text-sm">Recent Commercial Enquiries</h3>
-                <button
-                  onClick={() => setActiveTab('enquiries')}
-                  className="text-xs text-cyan-400 hover:underline"
-                >
-                  View All ({enquiries.length})
-                </button>
-              </div>
-
-              <div className="space-y-3">
-                {enquiries.slice(0, 4).map(e => (
-                  <div 
-                    key={e.id}
-                    onClick={() => {
-                      setSelectedEnquiry(e);
-                      setActiveTab('enquiries');
-                    }}
-                    className="p-3.5 rounded-xl bg-slate-950/80 border border-slate-800/80 hover:border-slate-700 transition-colors cursor-pointer space-y-1.5"
-                  >
-                    <div className="flex items-center justify-between text-xs">
-                      <span className="font-specs font-bold text-cyan-400">{e.id}</span>
-                      <span className={`px-2 py-0.5 rounded text-[10px] font-specs uppercase ${
-                        e.status === 'New' ? 'bg-cyan-950 text-cyan-300 border border-cyan-800' :
-                        e.status === 'Qualified' ? 'bg-emerald-950 text-emerald-300 border border-emerald-800' :
-                        'bg-slate-800 text-slate-300'
-                      }`}>
-                        {e.status}
-                      </span>
-                    </div>
-                    <div className="text-xs font-bold text-white">
-                      {e.company} — <span className="font-normal text-slate-400">{e.contactName}</span>
-                    </div>
-                    <div className="text-[11px] text-slate-400 flex items-center justify-between">
-                      <span>{e.enquiryType} {e.vesselName ? `• ${e.vesselName}` : ''}</span>
-                      <span className="font-specs">{new Date(e.createdAt).toLocaleDateString()}</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
             </div>
 
-            {/* Audit History Snapshot */}
-            <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
-              <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-                <h3 className="font-bold text-white text-sm">Recent Governance Audit Log</h3>
-                <button
-                  onClick={() => setActiveTab('audit')}
-                  className="text-xs text-cyan-400 hover:underline"
-                >
-                  View Full Audit ({auditLogs.length})
-                </button>
-              </div>
-
-              <div className="space-y-3">
-                {auditLogs.slice(0, 4).map(log => (
-                  <div key={log.id} className="p-3.5 rounded-xl bg-slate-950/80 border border-slate-800/80 text-xs space-y-1">
-                    <div className="flex items-center justify-between text-[11px] text-slate-400">
-                      <span className="font-specs text-amber-400">{log.action}</span>
-                      <span className="font-specs">{new Date(log.timestamp).toLocaleTimeString()}</span>
-                    </div>
-                    <div className="text-slate-200 font-medium">{log.entity}</div>
-                    <div className="text-[11px] text-slate-400 line-clamp-1">{log.summary}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-          </div>
-        </div>
-      )}
-
-      {/* TAB 2: FLEET REGISTER (CRUD & LIFECYCLE) */}
-      {activeTab === 'vessels' && (
-        <div className="space-y-6 animate-fadeIn">
-          {/* Controls */}
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-slate-900 p-4 rounded-2xl border border-slate-800">
-            <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
-              <div className="relative flex-1 sm:w-72">
-                <Search className="w-4 h-4 text-slate-500 absolute left-3 top-2.5" />
-                <input
-                  type="text"
-                  placeholder="Search fleet records..."
-                  value={vesselSearch}
-                  onChange={e => setVesselSearch(e.target.value)}
-                  className="w-full pl-9 pr-3 py-1.5 rounded-lg bg-slate-950 border border-slate-700 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500"
-                />
-              </div>
-
-              <select
-                value={vesselStatusFilter}
-                onChange={e => setVesselStatusFilter(e.target.value)}
-                className="px-3 py-1.5 rounded-lg bg-slate-950 border border-slate-700 text-xs text-slate-300 focus:outline-none"
-              >
-                <option value="ALL">All Publication States</option>
-                <option value="Published">Published (Public)</option>
-                <option value="Draft">Draft (Internal)</option>
-                <option value="Unpublished">Unpublished</option>
-                <option value="Archived">Archived</option>
-              </select>
-            </div>
-
-            {canEditVessel && (
-              <button
-                onClick={handleOpenAddVessel}
-                className="w-full sm:w-auto px-4 py-2 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-semibold text-xs flex items-center justify-center gap-1.5 transition-colors"
-              >
-                <Plus className="w-4 h-4" />
-                <span>Create Vessel Record</span>
-              </button>
-            )}
-          </div>
-
-          {/* Table */}
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs">
-                <thead className="bg-slate-950 text-slate-400 uppercase font-specs text-[11px] border-b border-slate-800">
-                  <tr>
-                    <th className="py-3 px-4">Vessel Name / ID</th>
-                    <th className="py-3 px-4">Type</th>
-                    <th className="py-3 px-4">DWT / Draft</th>
-                    <th className="py-3 px-4">Flag / Built</th>
-                    <th className="py-3 px-4">Commercial Status</th>
-                    <th className="py-3 px-4">Publication State</th>
-                    <th className="py-3 px-4 text-right">Actions</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-800/80">
-                  {filteredVessels.map(v => (
-                    <tr key={v.id} className="hover:bg-slate-850/50">
-                      <td className="py-3 px-4">
-                        <div className="font-bold text-white">{v.name}</div>
-                        <div className="text-[11px] text-slate-500 font-specs">{v.id} • IMO: {v.imoNumber}</div>
-                      </td>
-                      <td className="py-3 px-4 text-slate-300">
-                        {v.subType || v.type}
-                      </td>
-                      <td className="py-3 px-4 font-specs">
-                        <span className="text-white font-bold">{v.dwt.toLocaleString()} MT</span>
-                        <span className="text-slate-400 text-[11px] block">{v.summerDraft}m draft</span>
-                      </td>
-                      <td className="py-3 px-4 text-slate-300">
-                        <div>{v.flag}</div>
-                        <div className="text-[11px] text-slate-500 font-specs">{v.builtYear}</div>
-                      </td>
-                      <td className="py-3 px-4">
-                        <span className="px-2 py-0.5 rounded text-[10px] font-specs bg-slate-800 text-slate-300">
-                          {v.availabilityStatus}
-                        </span>
-                      </td>
-                      <td className="py-3 px-4">
-                        <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-specs font-semibold uppercase ${
-                          v.publicationStatus === 'Published'
-                            ? 'bg-emerald-950 text-emerald-400 border border-emerald-800'
-                            : v.publicationStatus === 'Draft'
-                            ? 'bg-amber-950 text-amber-400 border border-amber-800'
-                            : 'bg-rose-950 text-rose-400 border border-rose-800'
-                        }`}>
-                          ● {v.publicationStatus}
-                        </span>
-                      </td>
-                      <td className="py-3 px-4 text-right">
-                        <div className="flex items-center justify-end gap-1.5">
-                          {canEditVessel && (
-                            <button
-                              onClick={() => handleOpenEditVessel(v)}
-                              className="p-1.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white"
-                              title="Edit Particulars"
-                            >
-                              <Edit3 className="w-3.5 h-3.5" />
-                            </button>
-                          )}
-                          {canPublishVessel && (
-                            <button
-                              onClick={() => handleTogglePublish(v)}
-                              className={`px-2 py-1 rounded text-[11px] font-medium ${
-                                v.publicationStatus === 'Published'
-                                  ? 'bg-amber-950 text-amber-300 hover:bg-amber-900 border border-amber-800'
-                                  : 'bg-emerald-950 text-emerald-300 hover:bg-emerald-900 border border-emerald-800'
-                              }`}
-                              title="Toggle Publication Status"
-                            >
-                              {v.publicationStatus === 'Published' ? 'Unpublish' : 'Publish'}
-                            </button>
-                          )}
-                          {canEditVessel && v.publicationStatus !== 'Archived' && (
-                            <button
-                              onClick={() => handleArchiveVessel(v)}
-                              className="p-1.5 rounded bg-slate-800 hover:bg-rose-950 text-slate-400 hover:text-rose-400"
-                              title="Archive Vessel Record"
-                            >
-                              <Archive className="w-3.5 h-3.5" />
-                            </button>
-                          )}
-                        </div>
-                      </td>
+            <div className="bg-white border border-slate-200 rounded overflow-hidden shadow-sm">
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-xs">
+                  <thead className="bg-[#FAF5EE] text-[#0A192F] uppercase font-specs text-[11px] border-b border-slate-200">
+                    <tr>
+                      <th className="py-3 px-4 font-bold">Vessel Name / ID</th>
+                      <th className="py-3 px-4 font-bold">Type</th>
+                      <th className="py-3 px-4 font-bold">DWT / Draft</th>
+                      <th className="py-3 px-4 font-bold">Flag / Built</th>
+                      <th className="py-3 px-4 font-bold">Commercial Status</th>
+                      <th className="py-3 px-4 font-bold">Publication State</th>
+                      <th className="py-3 px-4 text-right font-bold">Actions</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100">
+                    {filteredVessels.map(v => (
+                      <tr key={v.id} className="hover:bg-slate-50 transition-colors">
+                        <td className="py-3 px-4">
+                          <div className="font-bold text-[#0A192F]">{v.name}</div>
+                          <div className="text-[11px] text-slate-500 font-specs">{v.id} • IMO: {v.imoNumber}</div>
+                        </td>
+                        <td className="py-3 px-4 text-slate-700">
+                          {v.subType || v.type}
+                        </td>
+                        <td className="py-3 px-4 font-specs">
+                          <span className="text-[#0A192F] font-bold">{v.dwt.toLocaleString()} MT</span>
+                          <span className="text-slate-500 text-[11px] block">{v.summerDraft}m draft</span>
+                        </td>
+                        <td className="py-3 px-4 text-slate-700">
+                          <div>{v.flag}</div>
+                          <div className="text-[11px] text-slate-500 font-specs">{v.builtYear}</div>
+                        </td>
+                        <td className="py-3 px-4">
+                          <span className="px-2 py-0.5 rounded text-[10px] font-specs bg-slate-100 text-slate-700 font-medium">
+                            {v.availabilityStatus}
+                          </span>
+                        </td>
+                        <td className="py-3 px-4">
+                          <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-specs font-semibold uppercase ${
+                            v.publicationStatus === 'Published'
+                              ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
+                              : v.publicationStatus === 'Draft'
+                              ? 'bg-amber-50 text-amber-800 border border-amber-200'
+                              : 'bg-rose-50 text-rose-800 border border-rose-200'
+                          }`}>
+                            ● {v.publicationStatus}
+                          </span>
+                        </td>
+                        <td className="py-3 px-4 text-right">
+                          <div className="flex items-center justify-end gap-1.5">
+                            {canEditVessel && (
+                              <button
+                                onClick={() => handleOpenEditVessel(v)}
+                                className="p-1.5 rounded border border-slate-200 hover:border-[#0A192F] text-slate-600 hover:text-[#0A192F] transition-colors"
+                                title="Edit Particulars"
+                              >
+                                <Edit3 className="w-3.5 h-3.5" />
+                              </button>
+                            )}
+                            {canPublishVessel && (
+                              <button
+                                onClick={() => handleTogglePublish(v)}
+                                className={`px-2 py-1 rounded text-[11px] font-medium border ${
+                                  v.publicationStatus === 'Published'
+                                    ? 'bg-amber-50 text-amber-800 border-amber-200 hover:bg-amber-100'
+                                    : 'bg-emerald-50 text-emerald-800 border-emerald-200 hover:bg-emerald-100'
+                                }`}
+                              >
+                                {v.publicationStatus === 'Published' ? 'Unpublish' : 'Publish'}
+                              </button>
+                            )}
+                            {canEditVessel && v.publicationStatus !== 'Archived' && (
+                              <button
+                                onClick={() => handleArchiveVessel(v)}
+                                className="p-1.5 rounded border border-slate-200 hover:border-rose-400 text-slate-500 hover:text-rose-600 transition-colors"
+                                title="Archive Record"
+                              >
+                                <Archive className="w-3.5 h-3.5" />
+                              </button>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* TAB 3: COMMERCIAL ENQUIRIES */}
-      {activeTab === 'enquiries' && (
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 animate-fadeIn">
-          
-          {/* Enquiries List */}
-          <div className="lg:col-span-7 space-y-4">
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-3 bg-slate-900 p-4 rounded-2xl border border-slate-800">
-              <div className="relative flex-1 w-full sm:w-auto">
-                <Search className="w-4 h-4 text-slate-500 absolute left-3 top-2.5" />
-                <input
-                  type="text"
-                  placeholder="Search by company, name or ref ID..."
-                  value={enquirySearch}
-                  onChange={e => setEnquirySearch(e.target.value)}
-                  className="w-full pl-9 pr-3 py-1.5 rounded-lg bg-slate-950 border border-slate-700 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500"
-                />
+        {/* TAB 3: COMMERCIAL ENQUIRIES */}
+        {activeTab === 'enquiries' && (
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <div className="lg:col-span-7 space-y-4">
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-3 bg-white p-4 rounded border border-slate-200 shadow-sm">
+                <div className="relative flex-1 w-full sm:w-auto">
+                  <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
+                  <input
+                    type="text"
+                    placeholder="Search by company, contact or reference..."
+                    value={enquirySearch}
+                    onChange={e => setEnquirySearch(e.target.value)}
+                    className="w-full pl-9 pr-3 py-1.5 rounded border border-slate-300 text-xs text-[#0A192F] placeholder-slate-400 focus:outline-none focus:border-[#0A192F]"
+                  />
+                </div>
+
+                <select
+                  value={enquiryStatusFilter}
+                  onChange={e => setEnquiryStatusFilter(e.target.value)}
+                  className="px-3 py-1.5 rounded border border-slate-300 text-xs text-[#0A192F] bg-white focus:outline-none"
+                >
+                  <option value="ALL">All Statuses</option>
+                  <option value="New">New</option>
+                  <option value="In Review">In Review</option>
+                  <option value="Replied">Replied</option>
+                  <option value="Qualified">Qualified</option>
+                  <option value="Closed">Closed</option>
+                </select>
               </div>
 
-              <select
-                value={enquiryStatusFilter}
-                onChange={e => setEnquiryStatusFilter(e.target.value)}
-                className="px-3 py-1.5 rounded-lg bg-slate-950 border border-slate-700 text-xs text-slate-300 focus:outline-none"
-              >
-                <option value="ALL">All Statuses</option>
-                <option value="New">New</option>
-                <option value="In Review">In Review</option>
-                <option value="Replied">Replied</option>
-                <option value="Qualified">Qualified</option>
-                <option value="Closed">Closed</option>
-              </select>
+              <div className="space-y-3">
+                {filteredEnquiries.map(e => {
+                  const isSelected = selectedEnquiry && selectedEnquiry.id === e.id;
+                  return (
+                    <div
+                      key={e.id}
+                      onClick={() => setSelectedEnquiry(e)}
+                      className={`p-5 rounded border transition-all cursor-pointer space-y-2.5 ${
+                        isSelected
+                          ? 'bg-[#FAF5EE] border-[#C5A880] ring-1 ring-[#C5A880]'
+                          : 'bg-white border-slate-200 hover:border-slate-300 shadow-sm'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between text-xs">
+                        <div className="flex items-center gap-2">
+                          <span className="font-specs font-bold text-[#0A192F]">{e.id}</span>
+                          <span className="text-slate-400">•</span>
+                          <span className="text-slate-500 font-specs">{new Date(e.createdAt).toLocaleDateString()}</span>
+                        </div>
+                        <span className={`px-2 py-0.5 rounded text-[10px] font-specs uppercase font-semibold ${
+                          e.status === 'New' ? 'bg-[#FAF5EE] text-[#9A7B4F] border border-[#E8DCC8]' :
+                          e.status === 'Qualified' ? 'bg-emerald-50 text-emerald-800 border border-emerald-200' :
+                          'bg-slate-100 text-slate-700'
+                        }`}>
+                          {e.status}
+                        </span>
+                      </div>
+
+                      <div className="flex items-center justify-between">
+                        <strong className="text-[#0A192F] text-sm">{e.company}</strong>
+                        <span className="text-xs text-slate-600">{e.contactName}</span>
+                      </div>
+
+                      <div className="text-xs text-slate-500 flex items-center justify-between">
+                        <span>{e.enquiryType} {e.vesselName ? `(Vessel: ${e.vesselName})` : ''}</span>
+                        <span className="text-[11px] text-slate-400 font-specs">Desk: {e.assignedTo || 'Unassigned'}</span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
 
-            <div className="space-y-3">
-              {filteredEnquiries.map(e => {
-                const isSelected = selectedEnquiry && selectedEnquiry.id === e.id;
-                return (
-                  <div
-                    key={e.id}
-                    onClick={() => setSelectedEnquiry(e)}
-                    className={`p-4 rounded-2xl border transition-all cursor-pointer space-y-2 ${
-                      isSelected
-                        ? 'bg-slate-850 border-cyan-500 shadow-lg shadow-cyan-950/40 ring-1 ring-cyan-500'
-                        : 'bg-slate-900 border-slate-800 hover:border-slate-700'
-                    }`}
-                  >
-                    <div className="flex items-center justify-between text-xs">
-                      <div className="flex items-center gap-2">
-                        <span className="font-specs font-bold text-cyan-400">{e.id}</span>
-                        <span className="text-slate-500">•</span>
-                        <span className="text-slate-400 font-specs">{new Date(e.createdAt).toLocaleDateString()}</span>
-                      </div>
-                      <span className={`px-2 py-0.5 rounded text-[10px] font-specs uppercase font-semibold ${
-                        e.status === 'New' ? 'bg-cyan-950 text-cyan-300 border border-cyan-800' :
-                        e.status === 'Qualified' ? 'bg-emerald-950 text-emerald-300 border border-emerald-800' :
-                        e.status === 'Replied' ? 'bg-blue-950 text-blue-300 border border-blue-800' :
-                        'bg-slate-800 text-slate-400'
-                      }`}>
-                        {e.status}
-                      </span>
+            {/* Enquiry Detail Drawer */}
+            <div className="lg:col-span-5">
+              {selectedEnquiry ? (
+                <div className="bg-white border border-slate-200 rounded p-6 space-y-6 sticky top-24 shadow-md">
+                  <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+                    <div>
+                      <span className="text-[11px] font-specs text-[#9A7B4F] font-bold">{selectedEnquiry.id}</span>
+                      <h3 className="font-serif-maritime text-lg font-bold text-[#0A192F]">{selectedEnquiry.company}</h3>
                     </div>
-
-                    <div className="flex items-center justify-between">
-                      <strong className="text-white text-sm">{e.company}</strong>
-                      <span className="text-xs text-slate-400">{e.contactName}</span>
-                    </div>
-
-                    <div className="text-xs text-slate-400 flex items-center justify-between">
-                      <span>{e.enquiryType} {e.vesselName ? `(Vessel: ${e.vesselName})` : ''}</span>
-                      <span className="text-[11px] text-slate-500">Assignee: {e.assignedTo || 'Unassigned'}</span>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* Enquiry Detail Drawer */}
-          <div className="lg:col-span-5">
-            {selectedEnquiry ? (
-              <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 space-y-6 sticky top-24 shadow-2xl">
-                <div className="flex items-center justify-between border-b border-slate-800 pb-4">
-                  <div>
-                    <span className="text-[11px] font-specs text-cyan-400 font-bold">{selectedEnquiry.id}</span>
-                    <h3 className="text-lg font-bold text-white">{selectedEnquiry.company}</h3>
-                  </div>
-                  <button
-                    onClick={() => setSelectedEnquiry(null)}
-                    className="p-1 rounded text-slate-500 hover:text-white"
-                  >
-                    <X className="w-5 h-5" />
-                  </button>
-                </div>
-
-                {/* Status Switcher */}
-                {canManageEnquiry && (
-                  <div className="space-y-1.5">
-                    <label className="text-xs font-semibold text-slate-300 block">Commercial Lifecycle Status:</label>
-                    <div className="flex flex-wrap gap-1.5">
-                      {['New', 'In Review', 'Replied', 'Qualified', 'Closed'].map(st => (
-                        <button
-                          key={st}
-                          onClick={() => handleUpdateEnquiryStatus(selectedEnquiry.id, st)}
-                          className={`px-2.5 py-1 rounded text-xs font-semibold transition-all ${
-                            selectedEnquiry.status === st
-                              ? 'bg-cyan-500 text-slate-950 font-bold'
-                              : 'bg-slate-950 text-slate-400 hover:bg-slate-800'
-                          }`}
-                        >
-                          {st}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {/* Contact Data */}
-                <div className="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-2 text-xs">
-                  <div className="flex items-center justify-between py-1 border-b border-slate-800">
-                    <span className="text-slate-400">Principal Contact:</span>
-                    <strong className="text-slate-200">{selectedEnquiry.contactName}</strong>
-                  </div>
-                  <div className="flex items-center justify-between py-1 border-b border-slate-800">
-                    <span className="text-slate-400">Email:</span>
-                    <a href={`mailto:${selectedEnquiry.email}`} className="text-cyan-400 hover:underline">{selectedEnquiry.email}</a>
-                  </div>
-                  <div className="flex items-center justify-between py-1">
-                    <span className="text-slate-400">Phone:</span>
-                    <span className="text-slate-200 font-specs">{selectedEnquiry.phone}</span>
-                  </div>
-                </div>
-
-                {/* Cargo / Vessel specs if present */}
-                {(selectedEnquiry.vesselName || selectedEnquiry.cargoType || selectedEnquiry.loadPort) && (
-                  <div className="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-2 text-xs">
-                    <span className="text-[10px] font-specs uppercase text-cyan-400 font-bold block mb-1">
-                      Voyage & Cargo Specification
-                    </span>
-                    {selectedEnquiry.vesselName && (
-                      <div className="flex justify-between py-1 border-b border-slate-800">
-                        <span className="text-slate-400">Vessel Requested:</span>
-                        <strong className="text-white">{selectedEnquiry.vesselName}</strong>
-                      </div>
-                    )}
-                    {selectedEnquiry.cargoType && (
-                      <div className="flex justify-between py-1 border-b border-slate-800">
-                        <span className="text-slate-400">Cargo Commodity:</span>
-                        <span className="text-slate-200">{selectedEnquiry.cargoType}</span>
-                      </div>
-                    )}
-                    {selectedEnquiry.cargoVolume && (
-                      <div className="flex justify-between py-1 border-b border-slate-800">
-                        <span className="text-slate-400">Volume:</span>
-                        <span className="text-slate-200 font-specs">{selectedEnquiry.cargoVolume}</span>
-                      </div>
-                    )}
-                    {selectedEnquiry.loadPort && (
-                      <div className="flex justify-between py-1">
-                        <span className="text-slate-400">Ports:</span>
-                        <span className="text-slate-200 text-right">{selectedEnquiry.loadPort} → {selectedEnquiry.dischargePort}</span>
-                      </div>
-                    )}
-                  </div>
-                )}
-
-                {/* Client Message */}
-                <div className="space-y-1">
-                  <span className="text-xs font-semibold text-slate-300">Requirement Notes:</span>
-                  <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 text-xs text-slate-300 leading-relaxed">
-                    {selectedEnquiry.message || 'No additional text provided.'}
-                  </div>
-                </div>
-
-                {/* Private Internal Notes (BRD M09 / FR-018) */}
-                <div className="space-y-2 pt-2 border-t border-slate-800">
-                  <span className="text-xs font-semibold text-amber-400 flex items-center gap-1.5">
-                    <Lock className="w-3.5 h-3.5" />
-                    <span>Private Commercial Notes (Restricted Staff View):</span>
-                  </span>
-                  <div className="p-3 rounded-xl bg-amber-950/20 border border-amber-900/40 text-[11px] text-amber-200/90 leading-relaxed font-mono">
-                    {selectedEnquiry.internalNotes || 'No notes added yet.'}
+                    <button
+                      onClick={() => setSelectedEnquiry(null)}
+                      className="p-1 rounded text-slate-400 hover:text-[#0A192F]"
+                    >
+                      <X className="w-5 h-5" />
+                    </button>
                   </div>
 
+                  {/* Lifecycle Switcher */}
                   {canManageEnquiry && (
-                    <div className="flex gap-2 pt-1">
-                      <input
-                        type="text"
-                        placeholder="Add private note (e.g. Sent Worldscale 120 indication)..."
-                        value={newInternalNote}
-                        onChange={e => setNewInternalNote(e.target.value)}
-                        className="flex-1 px-3 py-1.5 rounded-lg bg-slate-950 border border-slate-800 text-xs text-white focus:outline-none focus:border-cyan-500"
-                      />
-                      <button
-                        onClick={handleAddInternalNote}
-                        className="px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs"
-                      >
-                        Add
-                      </button>
+                    <div className="space-y-2">
+                      <label className="text-xs font-semibold text-[#0A192F] block">Commercial Lifecycle Status:</label>
+                      <div className="flex flex-wrap gap-1.5">
+                        {['New', 'In Review', 'Replied', 'Qualified', 'Closed'].map(st => (
+                          <button
+                            key={st}
+                            onClick={() => handleUpdateEnquiryStatus(selectedEnquiry.id, st)}
+                            className={`px-3 py-1 rounded text-xs font-semibold transition-all border ${
+                              selectedEnquiry.status === st
+                                ? 'bg-[#0A192F] text-white border-[#0A192F]'
+                                : 'bg-[#F8F9FA] text-slate-600 border-slate-200 hover:border-slate-300'
+                            }`}
+                          >
+                            {st}
+                          </button>
+                        ))}
+                      </div>
                     </div>
                   )}
+
+                  {/* Contact Particulars */}
+                  <div className="bg-[#F8F9FA] p-4 rounded border border-slate-200 space-y-2 text-xs">
+                    <div className="flex items-center justify-between py-1 border-b border-slate-200">
+                      <span className="text-slate-500">Contact:</span>
+                      <strong className="text-[#0A192F]">{selectedEnquiry.contactName}</strong>
+                    </div>
+                    <div className="flex items-center justify-between py-1 border-b border-slate-200">
+                      <span className="text-slate-500">Email:</span>
+                      <a href={`mailto:${selectedEnquiry.email}`} className="text-[#0A192F] hover:text-[#9A7B4F] underline">{selectedEnquiry.email}</a>
+                    </div>
+                    <div className="flex items-center justify-between py-1">
+                      <span className="text-slate-500">Phone:</span>
+                      <span className="text-[#0A192F] font-specs">{selectedEnquiry.phone}</span>
+                    </div>
+                  </div>
+
+                  {/* Cargo / Specs */}
+                  {(selectedEnquiry.vesselName || selectedEnquiry.cargoType || selectedEnquiry.loadPort) && (
+                    <div className="bg-[#F8F9FA] p-4 rounded border border-slate-200 space-y-2 text-xs">
+                      <span className="text-[10px] font-specs uppercase text-[#9A7B4F] font-bold block mb-1">
+                        Voyage & Cargo Particulars
+                      </span>
+                      {selectedEnquiry.vesselName && (
+                        <div className="flex justify-between py-1 border-b border-slate-200">
+                          <span className="text-slate-500">Vessel Requested:</span>
+                          <strong className="text-[#0A192F]">{selectedEnquiry.vesselName}</strong>
+                        </div>
+                      )}
+                      {selectedEnquiry.cargoType && (
+                        <div className="flex justify-between py-1 border-b border-slate-200">
+                          <span className="text-slate-500">Cargo:</span>
+                          <span className="text-[#0A192F]">{selectedEnquiry.cargoType}</span>
+                        </div>
+                      )}
+                      {selectedEnquiry.cargoVolume && (
+                        <div className="flex justify-between py-1 border-b border-slate-200">
+                          <span className="text-slate-500">Volume:</span>
+                          <span className="text-[#0A192F] font-specs">{selectedEnquiry.cargoVolume}</span>
+                        </div>
+                      )}
+                      {selectedEnquiry.loadPort && (
+                        <div className="flex justify-between py-1">
+                          <span className="text-slate-500">Ports:</span>
+                          <span className="text-[#0A192F]">{selectedEnquiry.loadPort} → {selectedEnquiry.dischargePort}</span>
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Client Message */}
+                  <div className="space-y-1.5">
+                    <span className="text-xs font-semibold text-[#0A192F]">Client Specifications:</span>
+                    <div className="p-3.5 rounded bg-[#F8F9FA] border border-slate-200 text-xs text-slate-700 leading-relaxed">
+                      {selectedEnquiry.message || 'No additional specifications provided.'}
+                    </div>
+                  </div>
+
+                  {/* Private Internal Notes */}
+                  <div className="space-y-2 pt-2 border-t border-slate-200">
+                    <span className="text-xs font-semibold text-[#9A7B4F] flex items-center gap-1.5">
+                      <Lock className="w-3.5 h-3.5" />
+                      <span>Private Commercial Notes (Internal Staff Only):</span>
+                    </span>
+                    <div className="p-3 rounded bg-[#FAF5EE] border border-[#E8DCC8] text-[11px] text-[#0A192F] leading-relaxed font-mono">
+                      {selectedEnquiry.internalNotes || 'No notes added.'}
+                    </div>
+
+                    {canManageEnquiry && (
+                      <div className="flex gap-2 pt-1">
+                        <input
+                          type="text"
+                          placeholder="Add private note (e.g. Indicating WS 115)..."
+                          value={newInternalNote}
+                          onChange={e => setNewInternalNote(e.target.value)}
+                          className="flex-1 px-3 py-1.5 rounded border border-slate-300 text-xs text-[#0A192F] focus:outline-none focus:border-[#0A192F]"
+                        />
+                        <button
+                          onClick={handleAddInternalNote}
+                          className="px-3.5 py-1.5 rounded bg-[#0A192F] hover:bg-[#142D4C] text-white font-bold text-xs"
+                        >
+                          Add
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
-            ) : (
-              <div className="bg-slate-900/60 border border-slate-800 rounded-3xl p-12 text-center text-slate-500 text-xs">
-                Select an enquiry from the list to view particulars, assign owners, and manage commercial status.
-              </div>
-            )}
+              ) : (
+                <div className="bg-white border border-slate-200 rounded p-12 text-center text-slate-400 text-xs shadow-sm">
+                  Select an inquiry from the register to review requirements, update lifecycle status, and record private superintendent notes.
+                </div>
+              )}
+            </div>
           </div>
+        )}
 
-        </div>
-      )}
+        {/* TAB 4: SYSTEM AUDIT HISTORY */}
+        {activeTab === 'audit' && (
+          <div className="space-y-4">
+            <div className="flex items-center justify-between bg-white p-4 rounded border border-slate-200 text-xs shadow-sm">
+              <span className="text-[#0A192F] font-semibold">
+                Immutable Statutory Audit Trail (Conforming to BRD Module M11)
+              </span>
+              <span className="text-slate-500 font-specs">
+                {auditLogs.length} Events Logged
+              </span>
+            </div>
 
-      {/* TAB 4: AUDIT HISTORY LOG */}
-      {activeTab === 'audit' && (
-        <div className="space-y-4 animate-fadeIn">
-          <div className="flex items-center justify-between bg-slate-900 p-4 rounded-2xl border border-slate-800 text-xs">
-            <span className="text-slate-300 font-semibold">
-              Immutable System & Operational Audit Trail (BRD Module M11)
-            </span>
-            <span className="text-slate-500 font-specs">
-              {auditLogs.length} Events Recorded
-            </span>
-          </div>
-
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs">
-                <thead className="bg-slate-950 text-slate-400 uppercase font-specs text-[11px] border-b border-slate-800">
-                  <tr>
-                    <th className="py-3 px-4">Timestamp (UTC)</th>
-                    <th className="py-3 px-4">Action</th>
-                    <th className="py-3 px-4">Entity</th>
-                    <th className="py-3 px-4">Actor</th>
-                    <th className="py-3 px-4">Summary</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-800/80 font-mono text-[11px]">
-                  {auditLogs.map(log => (
-                    <tr key={log.id} className="hover:bg-slate-850/50">
-                      <td className="py-3 px-4 text-slate-400">
-                        {new Date(log.timestamp).toLocaleString()}
-                      </td>
-                      <td className="py-3 px-4 text-amber-400 font-bold">
-                        {log.action}
-                      </td>
-                      <td className="py-3 px-4 text-cyan-300">
-                        {log.entity}
-                      </td>
-                      <td className="py-3 px-4 text-slate-300">
-                        {log.actor}
-                      </td>
-                      <td className="py-3 px-4 text-slate-300 font-sans text-xs">
-                        {log.summary}
-                      </td>
+            <div className="bg-white border border-slate-200 rounded overflow-hidden shadow-sm">
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-xs">
+                  <thead className="bg-[#FAF5EE] text-[#0A192F] uppercase font-specs text-[11px] border-b border-slate-200">
+                    <tr>
+                      <th className="py-3 px-4 font-bold">Timestamp (UTC)</th>
+                      <th className="py-3 px-4 font-bold">Action</th>
+                      <th className="py-3 px-4 font-bold">Entity</th>
+                      <th className="py-3 px-4 font-bold">Actor</th>
+                      <th className="py-3 px-4 font-bold">Summary</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 font-mono text-[11px]">
+                    {auditLogs.map(log => (
+                      <tr key={log.id} className="hover:bg-slate-50 transition-colors">
+                        <td className="py-3 px-4 text-slate-500">
+                          {new Date(log.timestamp).toLocaleString()}
+                        </td>
+                        <td className="py-3 px-4 text-[#9A7B4F] font-bold">
+                          {log.action}
+                        </td>
+                        <td className="py-3 px-4 text-[#0A192F] font-semibold">
+                          {log.entity}
+                        </td>
+                        <td className="py-3 px-4 text-slate-600">
+                          {log.actor}
+                        </td>
+                        <td className="py-3 px-4 text-slate-700 font-sans text-xs">
+                          {log.summary}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* MODAL: ADD / EDIT VESSEL */}
-      {isVesselModalOpen && (
-        <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="w-full max-w-2xl bg-slate-900 border border-slate-700 rounded-2xl shadow-2xl overflow-hidden">
-            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800 bg-slate-950">
-              <h3 className="font-bold text-white text-base">
-                {editingVessel ? `Edit Vessel: ${editingVessel.name}` : 'Create New Vessel Record'}
-              </h3>
-              <button
-                onClick={() => setIsVesselModalOpen(false)}
-                className="p-1 rounded text-slate-400 hover:text-white"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            <form onSubmit={handleSaveVessel} className="p-6 space-y-4 text-xs">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-slate-300 font-medium mb-1">Vessel Name *</label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="e.g. GRAVITY RESOLUTE"
-                    value={vesselForm.name}
-                    onChange={e => setVesselForm({ ...vesselForm, name: e.target.value })}
-                    className="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-700 text-white focus:outline-none focus:border-cyan-500"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-slate-300 font-medium mb-1">IMO Number *</label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="e.g. 9924819"
-                    value={vesselForm.imoNumber}
-                    onChange={e => setVesselForm({ ...vesselForm, imoNumber: e.target.value })}
-                    className="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-700 text-white focus:outline-none focus:border-cyan-500 font-specs"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-slate-300 font-medium mb-1">Category</label>
-                  <select
-                    value={vesselForm.type}
-                    onChange={e => setVesselForm({ ...vesselForm, type: e.target.value })}
-                    className="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-700 text-white focus:outline-none"
-                  >
-                    <option value="Bulk Carrier">Bulk Carrier</option>
-                    <option value="Tanker">Crude Oil Tanker</option>
-                    <option value="Chemical Tanker">Chemical & Product Tanker</option>
-                    <option value="Offshore Support">Offshore Support (AHTS / PSV)</option>
-                    <option value="Container Carrier">Container Feeder</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-slate-300 font-medium mb-1">Sub-Type Description</label>
-                  <input
-                    type="text"
-                    placeholder="e.g. Ultramax Geared Dry Bulker"
-                    value={vesselForm.subType}
-                    onChange={e => setVesselForm({ ...vesselForm, subType: e.target.value })}
-                    className="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-700 text-white focus:outline-none"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div>
-                  <label className="block text-slate-300 font-medium mb-1">Deadweight (DWT)</label>
-                  <input
-                    type="number"
-                    value={vesselForm.dwt}
-                    onChange={e => setVesselForm({ ...vesselForm, dwt: parseInt(e.target.value) || 0 })}
-                    className="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-700 text-white font-specs"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-slate-300 font-medium mb-1">Summer Draft (m)</label>
-                  <input
-                    type="number"
-                    step="0.05"
-                    value={vesselForm.summerDraft}
-                    onChange={e => setVesselForm({ ...vesselForm, summerDraft: parseFloat(e.target.value) || 0 })}
-                    className="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-700 text-white font-specs"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-slate-300 font-medium mb-1">Built Year</label>
-                  <input
-                    type="number"
-                    value={vesselForm.builtYear}
-                    onChange={e => setVesselForm({ ...vesselForm, builtYear: parseInt(e.target.value) || 2024 })}
-                    className="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-700 text-white font-specs"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-slate-300 font-medium mb-1">Flag State</label>
-                  <input
-                    type="text"
-                    value={vesselForm.flag}
-                    onChange={e => setVesselForm({ ...vesselForm, flag: e.target.value })}
-                    className="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-700 text-white"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-slate-300 font-medium mb-1">Classification Society</label>
-                  <input
-                    type="text"
-                    value={vesselForm.classification}
-                    onChange={e => setVesselForm({ ...vesselForm, classification: e.target.value })}
-                    className="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-700 text-white"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-slate-300 font-medium mb-1">Commercial Status</label>
-                  <select
-                    value={vesselForm.availabilityStatus}
-                    onChange={e => setVesselForm({ ...vesselForm, availabilityStatus: e.target.value })}
-                    className="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-700 text-white"
-                  >
-                    <option value="Available for Charter">Available for Charter</option>
-                    <option value="On Voyage">On Voyage</option>
-                    <option value="Scheduled Survey">Scheduled Survey</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-slate-300 font-medium mb-1">Publication State</label>
-                  <select
-                    value={vesselForm.publicationStatus}
-                    onChange={e => setVesselForm({ ...vesselForm, publicationStatus: e.target.value })}
-                    className="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-700 text-white"
-                  >
-                    <option value="Published">Published (Public)</option>
-                    <option value="Draft">Draft (Internal)</option>
-                    <option value="Unpublished">Unpublished</option>
-                  </select>
-                </div>
-              </div>
-
-              <div className="pt-4 border-t border-slate-800 flex justify-end gap-3">
+        {/* MODAL: CREATE / EDIT VESSEL */}
+        {isVesselModalOpen && (
+          <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+            <div className="w-full max-w-2xl bg-white border-t-4 border-[#C5A880] rounded shadow-2xl overflow-hidden">
+              <div className="flex items-center justify-between px-6 py-4 bg-[#0A192F] text-white">
+                <h3 className="font-serif-maritime font-bold text-base">
+                  {editingVessel ? `Edit Vessel: ${editingVessel.name}` : 'Create New Fleet Record'}
+                </h3>
                 <button
-                  type="button"
                   onClick={() => setIsVesselModalOpen(false)}
-                  className="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold"
+                  className="p-1 text-slate-400 hover:text-white"
                 >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-5 py-2 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold shadow-lg"
-                >
-                  {editingVessel ? 'Save Changes' : 'Create Vessel'}
+                  <X className="w-5 h-5" />
                 </button>
               </div>
-            </form>
-          </div>
-        </div>
-      )}
 
+              <form onSubmit={handleSaveVessel} className="p-6 space-y-4 text-xs">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-[#0A192F] font-semibold mb-1">Vessel Name *</label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="e.g. GRAVITY RESOLUTE"
+                      value={vesselForm.name}
+                      onChange={e => setVesselForm({ ...vesselForm, name: e.target.value })}
+                      className="w-full px-3 py-2 rounded border border-slate-300 text-[#0A192F] focus:outline-none focus:border-[#0A192F]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[#0A192F] font-semibold mb-1">IMO Number *</label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="e.g. 9924819"
+                      value={vesselForm.imoNumber}
+                      onChange={e => setVesselForm({ ...vesselForm, imoNumber: e.target.value })}
+                      className="w-full px-3 py-2 rounded border border-slate-300 text-[#0A192F] focus:outline-none focus:border-[#0A192F] font-specs"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-[#0A192F] font-semibold mb-1">Vessel Type</label>
+                    <select
+                      value={vesselForm.type}
+                      onChange={e => setVesselForm({ ...vesselForm, type: e.target.value })}
+                      className="w-full px-3 py-2 rounded border border-slate-300 text-[#0A192F] bg-white focus:outline-none"
+                    >
+                      <option value="Bulk Carrier">Bulk Carrier</option>
+                      <option value="Tanker">Crude Oil Tanker</option>
+                      <option value="Chemical Tanker">Chemical & Product Tanker</option>
+                      <option value="Offshore Support">Offshore Support (AHTS / PSV)</option>
+                      <option value="Container Carrier">Container Feeder</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-[#0A192F] font-semibold mb-1">Sub-Type Description</label>
+                    <input
+                      type="text"
+                      placeholder="e.g. Ultramax Geared Dry Bulker"
+                      value={vesselForm.subType}
+                      onChange={e => setVesselForm({ ...vesselForm, subType: e.target.value })}
+                      className="w-full px-3 py-2 rounded border border-slate-300 text-[#0A192F] focus:outline-none"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div>
+                    <label className="block text-[#0A192F] font-semibold mb-1">Deadweight (DWT)</label>
+                    <input
+                      type="number"
+                      value={vesselForm.dwt}
+                      onChange={e => setVesselForm({ ...vesselForm, dwt: parseInt(e.target.value) || 0 })}
+                      className="w-full px-3 py-2 rounded border border-slate-300 text-[#0A192F] font-specs"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[#0A192F] font-semibold mb-1">Summer Draft (m)</label>
+                    <input
+                      type="number"
+                      step="0.05"
+                      value={vesselForm.summerDraft}
+                      onChange={e => setVesselForm({ ...vesselForm, summerDraft: parseFloat(e.target.value) || 0 })}
+                      className="w-full px-3 py-2 rounded border border-slate-300 text-[#0A192F] font-specs"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[#0A192F] font-semibold mb-1">Built Year</label>
+                    <input
+                      type="number"
+                      value={vesselForm.builtYear}
+                      onChange={e => setVesselForm({ ...vesselForm, builtYear: parseInt(e.target.value) || 2024 })}
+                      className="w-full px-3 py-2 rounded border border-slate-300 text-[#0A192F] font-specs"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-[#0A192F] font-semibold mb-1">Flag State</label>
+                    <input
+                      type="text"
+                      value={vesselForm.flag}
+                      onChange={e => setVesselForm({ ...vesselForm, flag: e.target.value })}
+                      className="w-full px-3 py-2 rounded border border-slate-300 text-[#0A192F]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[#0A192F] font-semibold mb-1">Classification Society</label>
+                    <input
+                      type="text"
+                      value={vesselForm.classification}
+                      onChange={e => setVesselForm({ ...vesselForm, classification: e.target.value })}
+                      className="w-full px-3 py-2 rounded border border-slate-300 text-[#0A192F]"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-[#0A192F] font-semibold mb-1">Commercial Status</label>
+                    <select
+                      value={vesselForm.availabilityStatus}
+                      onChange={e => setVesselForm({ ...vesselForm, availabilityStatus: e.target.value })}
+                      className="w-full px-3 py-2 rounded border border-slate-300 text-[#0A192F] bg-white"
+                    >
+                      <option value="Available for Charter">Available for Charter</option>
+                      <option value="On Voyage">On Voyage</option>
+                      <option value="Scheduled Survey">Scheduled Survey</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-[#0A192F] font-semibold mb-1">Publication State</label>
+                    <select
+                      value={vesselForm.publicationStatus}
+                      onChange={e => setVesselForm({ ...vesselForm, publicationStatus: e.target.value })}
+                      className="w-full px-3 py-2 rounded border border-slate-300 text-[#0A192F] bg-white"
+                    >
+                      <option value="Published">Published (Public)</option>
+                      <option value="Draft">Draft (Internal)</option>
+                      <option value="Unpublished">Unpublished</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="pt-4 border-t border-slate-200 flex justify-end gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setIsVesselModalOpen(false)}
+                    className="px-4 py-2 rounded border border-slate-300 text-slate-700 text-xs font-semibold hover:bg-slate-50"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-5 py-2 rounded bg-[#0A192F] hover:bg-[#142D4C] text-white text-xs font-bold shadow"
+                  >
+                    {editingVessel ? 'Save Changes' : 'Create Vessel Record'}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+
+      </div>
     </div>
   );
 }

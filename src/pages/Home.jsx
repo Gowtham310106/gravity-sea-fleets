@@ -7,16 +7,14 @@ import {
   Compass, 
   ArrowRight, 
   Search, 
-  Filter, 
-  CheckCircle2, 
+  ChevronRight,
   Clock, 
   Globe2, 
   SlidersHorizontal,
-  ChevronRight,
-  TrendingUp,
+  Award,
   FileText,
   Radio,
-  Award
+  CheckCircle2
 } from 'lucide-react';
 import VoyageCalculator from '../components/VoyageCalculator';
 
@@ -44,38 +42,41 @@ export default function Home({
   const featuredVessels = vessels.slice(0, 4);
 
   return (
-    <div className="space-y-20 pb-16">
+    <div className="space-y-0 text-slate-800 bg-[#F8F9FA]">
       
-      {/* HERO SECTION */}
-      <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden border-b border-slate-800">
-        {/* Background Image with Deep Oceanic Tint */}
+      {/* CINEMATIC EDITORIAL HERO SECTION */}
+      <section className="relative min-h-[85vh] flex items-center overflow-hidden bg-[#071324]">
+        {/* Full-width Maritime Photography */}
         <div className="absolute inset-0 z-0">
           <img 
-            src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=2000&q=85" 
+            src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=2200&q=85" 
             alt="Commercial Maritime Vessel at Sea" 
-            className="w-full h-full object-cover object-center scale-105"
+            className="w-full h-full object-cover object-center filter contrast-105"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/85 to-slate-900/60" />
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-slate-950/60" />
-          <div className="absolute inset-0 nautical-grid opacity-20 pointer-events-none" />
+          {/* Deep Navy Gradient Scrim */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#071324] via-[#071324]/85 to-[#0A192F]/60" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#071324] via-transparent to-[#071324]/40" />
         </div>
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 w-full">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             
-            {/* Left Headline & Value Proposition */}
+            {/* Left Column: Prestigious Statement */}
             <div className="lg:col-span-7 space-y-6">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-950/80 border border-cyan-800/80 text-cyan-400 text-xs font-semibold backdrop-blur-md">
-                <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
-                <span>COMBINED MARITIME SERVICES & FLEET SOLUTIONS</span>
+              
+              <div className="inline-flex items-center gap-3">
+                <span className="w-8 h-[2px] bg-[#C5A880]" />
+                <span className="text-xs uppercase tracking-[0.25em] text-[#C5A880] font-specs font-semibold">
+                  COMBINED MARITIME SERVICES PLATFORM
+                </span>
               </div>
 
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-[1.1]">
-                Engineered For <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400">Ocean Trade</span>. Trusted Across Global Waters.
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-[1.12] font-serif-maritime">
+                Navigating Global Trade with Precision & Uncompromising Standards.
               </h1>
 
-              <p className="text-base sm:text-lg text-slate-300 leading-relaxed max-w-2xl font-normal">
-                GRAVITY SEA FLEETS unites commercial vessel chartering, technical superintendency, offshore marine logistics, and strict vetting compliance to ensure seamless, reliable maritime transport across international corridors.
+              <p className="text-base sm:text-lg text-slate-300 leading-relaxed max-w-2xl font-normal font-sans">
+                GRAVITY SEA FLEETS unites commercial vessel chartering, comprehensive technical superintendency, offshore marine logistics, and rigorous vetting compliance across international ocean corridors.
               </p>
 
               {/* Action Buttons */}
@@ -85,63 +86,64 @@ export default function Home({
                     setCurrentTab('fleet');
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                   }}
-                  className="px-6 py-3.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-bold text-sm shadow-xl shadow-cyan-950 flex items-center gap-2.5 transition-all group"
+                  className="px-7 py-3.5 bg-[#C5A880] hover:bg-[#B39266] text-[#071324] font-bold text-xs uppercase tracking-wider transition-all flex items-center gap-2.5 shadow-md"
                 >
-                  <Ship className="w-4 h-4 text-cyan-100" />
-                  <span>Discover Published Fleet</span>
-                  <ChevronRight className="w-4 h-4 text-cyan-200 group-hover:translate-x-1 transition-transform" />
+                  <Ship className="w-4 h-4 text-[#071324]" />
+                  <span>Explore Fleet Register</span>
+                  <ChevronRight className="w-4 h-4" />
                 </button>
 
                 <button
                   onClick={onOpenEnquiry}
-                  className="px-6 py-3.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 text-slate-200 hover:text-white border border-slate-700/80 font-semibold text-sm backdrop-blur-md transition-all flex items-center gap-2"
+                  className="px-7 py-3.5 bg-transparent hover:bg-white/10 text-white border border-slate-400 font-semibold text-xs uppercase tracking-wider transition-all flex items-center gap-2"
                 >
-                  <FileText className="w-4 h-4 text-cyan-400" />
-                  <span>Request Charter / RFP</span>
+                  <FileText className="w-4 h-4 text-[#C5A880]" />
+                  <span>Request Fixture / RFP</span>
                 </button>
               </div>
 
-              {/* Verified Trust Badges */}
-              <div className="pt-6 border-t border-slate-800/80 flex flex-wrap items-center gap-6 text-xs text-slate-400">
+              {/* Verified Trust Strip */}
+              <div className="pt-6 border-t border-slate-700/60 flex flex-wrap items-center gap-6 text-xs text-slate-300">
                 <div className="flex items-center gap-2">
-                  <ShieldCheck className="w-4 h-4 text-emerald-400" />
+                  <ShieldCheck className="w-4 h-4 text-[#C5A880]" />
                   <span>ISM & ISPS Certified</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Award className="w-4 h-4 text-cyan-400" />
-                  <span>DNV / Lloyd's / ABS Class</span>
+                  <Award className="w-4 h-4 text-[#C5A880]" />
+                  <span>DNV / Lloyd's / ABS Classed</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Clock className="w-4 h-4 text-blue-400" />
-                  <span>24/7 Operations Desk</span>
+                  <Clock className="w-4 h-4 text-emerald-400" />
+                  <span>24/7 Operations Desk Active</span>
                 </div>
               </div>
             </div>
 
-            {/* Right Quick Fleet Search Console */}
+            {/* Right Column: Clean White Fleet Finder Console */}
             <div className="lg:col-span-5">
-              <div className="bg-slate-900/90 border border-slate-800/90 rounded-2xl p-6 sm:p-8 shadow-2xl backdrop-blur-xl relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-600/10 rounded-full blur-2xl pointer-events-none" />
-
-                <div className="flex items-center justify-between border-b border-slate-800 pb-4 mb-5">
-                  <div className="flex items-center gap-2 text-white font-bold text-sm">
-                    <Search className="w-4 h-4 text-cyan-400" />
-                    <span>Quick Fleet Finder</span>
+              <div className="bg-white border-t-4 border-[#C5A880] p-6 sm:p-8 shadow-2xl space-y-5">
+                
+                <div className="border-b border-slate-200 pb-3 flex items-center justify-between">
+                  <div>
+                    <h3 className="text-base font-bold text-[#0A192F] uppercase tracking-wider font-specs">
+                      Fleet Search Console
+                    </h3>
+                    <p className="text-xs text-slate-500">Discover active commercial tonnage</p>
                   </div>
-                  <span className="text-[11px] font-specs text-cyan-400 bg-cyan-950/80 px-2 py-0.5 rounded border border-cyan-800">
-                    {vessels.length} Active Records
+                  <span className="text-xs font-specs font-bold text-[#0A192F] bg-slate-100 px-2.5 py-1 border border-slate-200">
+                    {vessels.length} VESSELS
                   </span>
                 </div>
 
                 <form onSubmit={handleHeroSearch} className="space-y-4 text-xs">
                   <div>
-                    <label className="block text-slate-300 font-semibold mb-1.5">
+                    <label className="block text-slate-700 font-semibold uppercase tracking-wider text-[11px] mb-1.5 font-specs">
                       Vessel Category / Trade
                     </label>
                     <select
                       value={quickCategory}
                       onChange={e => setQuickCategory(e.target.value)}
-                      className="w-full px-3 py-2.5 rounded-lg bg-slate-950 border border-slate-700 text-slate-200 focus:outline-none focus:border-cyan-500 font-medium"
+                      className="w-full px-3 py-2.5 bg-slate-50 border border-slate-300 text-slate-900 focus:outline-none focus:border-[#0A192F] font-medium"
                     >
                       <option value="ALL">All Commercial Categories</option>
                       <option value="Bulk Carrier">Dry Bulk Carriers (Ultramax & Kamsarmax)</option>
@@ -153,13 +155,13 @@ export default function Home({
                   </div>
 
                   <div>
-                    <label className="block text-slate-300 font-semibold mb-1.5">
+                    <label className="block text-slate-700 font-semibold uppercase tracking-wider text-[11px] mb-1.5 font-specs">
                       Commercial Availability
                     </label>
                     <select
                       value={quickStatus}
                       onChange={e => setQuickStatus(e.target.value)}
-                      className="w-full px-3 py-2.5 rounded-lg bg-slate-950 border border-slate-700 text-slate-200 focus:outline-none focus:border-cyan-500 font-medium"
+                      className="w-full px-3 py-2.5 bg-slate-50 border border-slate-300 text-slate-900 focus:outline-none focus:border-[#0A192F] font-medium"
                     >
                       <option value="ALL">Any Availability Status</option>
                       <option value="Available for Charter">Available for Charter (Prompt)</option>
@@ -168,22 +170,17 @@ export default function Home({
                     </select>
                   </div>
 
-                  <div className="p-3 rounded-lg bg-slate-950/60 border border-slate-800/80 text-[11px] text-slate-400 space-y-1">
-                    <div className="flex items-center gap-1.5 text-slate-300 font-medium">
-                      <Radio className="w-3.5 h-3.5 text-cyan-400" />
-                      <span>Commercial Chartering Protocol</span>
-                    </div>
-                    <p>
-                      Direct inquiries are routed to senior superintendents. Laycan windows, draft constraints, and fixture indications provided promptly.
-                    </p>
+                  <div className="p-3 bg-slate-50 border border-slate-200 text-[11px] text-slate-600 space-y-1">
+                    <strong className="text-[#0A192F] font-semibold block">Commercial Fixture Protocol:</strong>
+                    <span>Direct enquiries are reviewed by our senior chartering superintendents. Indicative freight, draft constraints, and laycan windows delivered within 4 hours.</span>
                   </div>
 
                   <button
                     type="submit"
-                    className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-bold text-xs uppercase tracking-wider shadow-lg shadow-cyan-950 flex items-center justify-center gap-2 transition-all"
+                    className="w-full py-3.5 bg-[#0A192F] hover:bg-[#0F223D] text-white font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-md"
                   >
-                    <Search className="w-4 h-4" />
-                    <span>Search Fleet Directory</span>
+                    <Search className="w-4 h-4 text-[#C5A880]" />
+                    <span>Search Published Fleet</span>
                   </button>
                 </form>
               </div>
@@ -191,45 +188,67 @@ export default function Home({
 
           </div>
         </div>
+      </section>
 
-        {/* Bottom Key Metric Ticker */}
-        <div className="absolute bottom-0 left-0 right-0 border-t border-slate-800/80 bg-slate-950/80 backdrop-blur-md">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 divide-y md:divide-y-0 md:divide-x divide-slate-800/80">
-              <div className="px-4 py-1 text-center md:text-left">
-                <span className="text-[11px] text-slate-400 uppercase font-specs block">Total Managed DWT</span>
-                <strong className="text-xl sm:text-2xl font-specs font-bold text-white">1.85M+ MT</strong>
-              </div>
-              <div className="px-4 py-1 text-center md:text-left">
-                <span className="text-[11px] text-slate-400 uppercase font-specs block">Technical Uptime</span>
-                <strong className="text-xl sm:text-2xl font-specs font-bold text-cyan-400">99.4%</strong>
-              </div>
-              <div className="px-4 py-1 text-center md:text-left">
-                <span className="text-[11px] text-slate-400 uppercase font-specs block">Zero-Harm Record</span>
-                <strong className="text-xl sm:text-2xl font-specs font-bold text-emerald-400">0.00 LTI</strong>
-              </div>
-              <div className="px-4 py-1 text-center md:text-left">
-                <span className="text-[11px] text-slate-400 uppercase font-specs block">Global Hubs</span>
-                <strong className="text-xl sm:text-2xl font-specs font-bold text-white">5 Strategic Ports</strong>
-              </div>
+      {/* METRICS & VERIFIED BENCHMARKS STRIP */}
+      <section className="bg-white border-y border-slate-200 py-10 px-4 sm:px-6 lg:px-8 shadow-sm">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 divide-y md:divide-y-0 md:divide-x divide-slate-200">
+            <div className="px-4 py-2 text-center md:text-left space-y-1">
+              <span className="text-[11px] text-slate-500 uppercase tracking-widest font-specs font-semibold block">
+                Total Managed Tonnage
+              </span>
+              <strong className="text-3xl lg:text-4xl font-specs font-bold text-[#0A192F] block">
+                1.85M+ <span className="text-sm font-normal text-slate-500">DWT</span>
+              </strong>
+              <p className="text-[11px] text-slate-500">Commercial & technical scope</p>
+            </div>
+
+            <div className="px-4 py-2 text-center md:text-left space-y-1">
+              <span className="text-[11px] text-slate-500 uppercase tracking-widest font-specs font-semibold block">
+                Operational Uptime
+              </span>
+              <strong className="text-3xl lg:text-4xl font-specs font-bold text-[#0284C7] block">
+                99.4%
+              </strong>
+              <p className="text-[11px] text-slate-500">Planned maintenance uptime</p>
+            </div>
+
+            <div className="px-4 py-2 text-center md:text-left space-y-1">
+              <span className="text-[11px] text-slate-500 uppercase tracking-widest font-specs font-semibold block">
+                Safety Track Record
+              </span>
+              <strong className="text-3xl lg:text-4xl font-specs font-bold text-emerald-700 block">
+                0.00 <span className="text-sm font-normal text-slate-500">LTI</span>
+              </strong>
+              <p className="text-[11px] text-slate-500">Zero-harm Lost Time benchmark</p>
+            </div>
+
+            <div className="px-4 py-2 text-center md:text-left space-y-1">
+              <span className="text-[11px] text-slate-500 uppercase tracking-widest font-specs font-semibold block">
+                Global Operations
+              </span>
+              <strong className="text-3xl lg:text-4xl font-specs font-bold text-[#0A192F] block">
+                5 Hubs
+              </strong>
+              <p className="text-[11px] text-slate-500">Dubai, Singapore, Rotterdam, Houston, Mumbai</p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* FEATURED FLEET SHOWCASE */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
-          <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-950 border border-cyan-800 text-cyan-400 text-xs font-semibold mb-2">
-              <Ship className="w-3.5 h-3.5" />
-              <span>Verified Fleet Discovery</span>
-            </div>
-            <h2 className="text-3xl font-extrabold text-white tracking-tight">
+      {/* FEATURED FLEET REGISTER */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 border-b border-slate-200 pb-6">
+          <div className="space-y-2">
+            <span className="text-xs uppercase tracking-[0.2em] text-[#9A7B4F] font-specs font-bold block">
+              VERIFIED FLEET REGISTER
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-[#0A192F] font-serif-maritime">
               Published Commercial Vessels
             </h2>
-            <p className="text-sm text-slate-400 mt-1">
-              Inspected, certified tonnage available for spot fixtures, period time charter, and technical representation.
+            <p className="text-sm text-slate-600 max-w-2xl">
+              Inspected, fully classed tonnage available for spot voyage charter, long-term time fixtures, and technical management.
             </p>
           </div>
 
@@ -238,23 +257,23 @@ export default function Home({
               setCurrentTab('fleet');
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-cyan-400 border border-slate-700 font-semibold text-xs transition-colors self-start md:self-auto"
+            className="inline-flex items-center gap-2 px-5 py-3 bg-[#0A192F] hover:bg-[#0F223D] text-white font-semibold text-xs tracking-wider uppercase transition-colors self-start md:self-auto shadow-sm"
           >
-            <span>View Complete Fleet Directory ({vessels.length})</span>
-            <ArrowRight className="w-4 h-4" />
+            <span>View All {vessels.length} Vessels</span>
+            <ArrowRight className="w-4 h-4 text-[#C5A880]" />
           </button>
         </div>
 
-        {/* Vessel Cards Grid */}
+        {/* Vessel Cards Grid: Clean White Cards with High-Res Ship Photos */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {featuredVessels.map((vessel) => (
             <div 
               key={vessel.id}
-              className="group bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden hover:border-cyan-500/60 shadow-lg hover:shadow-cyan-950/40 transition-all flex flex-col justify-between"
+              className="group bg-white border border-slate-200 hover:border-slate-400 hover:shadow-xl transition-all duration-300 flex flex-col justify-between"
             >
               <div>
-                {/* Vessel Image */}
-                <div className="relative aspect-video bg-slate-950 overflow-hidden">
+                {/* Photo Header */}
+                <div className="relative aspect-video bg-slate-900 overflow-hidden cursor-pointer" onClick={() => onSelectVessel(vessel)}>
                   <VesselImage 
                     src={vessel.imageUrl} 
                     alt={vessel.name} 
@@ -262,69 +281,72 @@ export default function Home({
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                   <div className="absolute top-3 left-3">
-                    <span className="px-2 py-0.5 rounded text-[10px] font-specs font-semibold uppercase bg-slate-950/80 text-cyan-300 border border-slate-700 backdrop-blur-sm">
+                    <span className="px-2.5 py-1 bg-[#0A192F]/90 text-white text-[10px] font-specs font-semibold uppercase tracking-wider">
                       {vessel.type}
                     </span>
                   </div>
                   <div className="absolute top-3 right-3">
-                    <span className={`px-2 py-0.5 rounded text-[10px] font-specs font-semibold uppercase backdrop-blur-sm ${
+                    <span className={`px-2 py-0.5 text-[10px] font-specs font-semibold uppercase ${
                       vessel.availabilityStatus === 'Available for Charter'
-                        ? 'bg-emerald-950/90 text-emerald-300 border border-emerald-700'
-                        : 'bg-blue-950/90 text-blue-300 border border-blue-700'
+                        ? 'bg-emerald-700 text-white'
+                        : 'bg-blue-800 text-white'
                     }`}>
-                      ● {vessel.availabilityStatus}
+                      {vessel.availabilityStatus === 'Available for Charter' ? 'PROMPT' : vessel.availabilityStatus}
                     </span>
                   </div>
                 </div>
 
-                {/* Vessel Summary */}
+                {/* Body Details */}
                 <div className="p-5 space-y-3">
                   <div>
-                    <h3 className="text-base font-bold text-white group-hover:text-cyan-400 transition-colors">
+                    <h3 
+                      onClick={() => onSelectVessel(vessel)}
+                      className="text-base font-bold text-[#0A192F] group-hover:text-[#0284C7] transition-colors cursor-pointer font-serif-maritime"
+                    >
                       {vessel.name}
                     </h3>
-                    <p className="text-xs text-slate-400 font-specs">
-                      {vessel.subType}
+                    <p className="text-xs text-slate-500 font-specs mt-0.5">
+                      IMO: {vessel.imoNumber} • {vessel.subType}
                     </p>
                   </div>
 
-                  {/* Quick specs matrix */}
-                  <div className="grid grid-cols-2 gap-2 text-[11px] bg-slate-950/60 p-2.5 rounded-lg border border-slate-800/80">
+                  {/* Clean Spec Grid */}
+                  <div className="grid grid-cols-2 gap-2 text-[11px] bg-slate-50 p-3 border border-slate-200">
                     <div>
-                      <span className="text-slate-400 block">DWT:</span>
-                      <strong className="text-slate-200 font-specs">{vessel.dwt.toLocaleString()} MT</strong>
+                      <span className="text-slate-500 block">Deadweight:</span>
+                      <strong className="text-[#0A192F] font-specs text-xs">{vessel.dwt.toLocaleString()} MT</strong>
                     </div>
                     <div>
-                      <span className="text-slate-400 block">Draft:</span>
-                      <strong className="text-slate-200 font-specs">{vessel.summerDraft} m</strong>
+                      <span className="text-slate-500 block">Draft:</span>
+                      <strong className="text-[#0A192F] font-specs text-xs">{vessel.summerDraft} m</strong>
                     </div>
                     <div>
-                      <span className="text-slate-400 block">Built:</span>
-                      <strong className="text-slate-200 font-specs">{vessel.builtYear}</strong>
+                      <span className="text-slate-500 block">Built / Yard:</span>
+                      <strong className="text-slate-700 font-specs truncate block">{vessel.builtYear} • {vessel.flag}</strong>
                     </div>
                     <div>
-                      <span className="text-slate-400 block">Flag:</span>
-                      <strong className="text-slate-200 truncate block">{vessel.flag}</strong>
+                      <span className="text-slate-500 block">Classification:</span>
+                      <strong className="text-[#0284C7] font-specs truncate block">{vessel.classification}</strong>
                     </div>
                   </div>
 
-                  <p className="text-xs text-slate-400 line-clamp-2">
+                  <p className="text-xs text-slate-600 line-clamp-2">
                     {vessel.features[0]}
                   </p>
                 </div>
               </div>
 
               {/* Card Footer Actions */}
-              <div className="p-5 pt-0 border-t border-slate-800/50 mt-2 flex items-center gap-2">
+              <div className="p-5 pt-0 border-t border-slate-100 mt-2 flex items-center gap-2">
                 <button
                   onClick={() => onSelectVessel(vessel)}
-                  className="flex-1 py-2 px-3 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white text-xs font-semibold transition-colors text-center"
+                  className="flex-1 py-2.5 px-3 bg-slate-100 hover:bg-slate-200 text-[#0A192F] text-xs font-bold uppercase tracking-wider transition-colors text-center"
                 >
                   Particulars
                 </button>
                 <button
                   onClick={() => onOpenEnquiry(vessel)}
-                  className="py-2 px-3 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-semibold transition-colors"
+                  className="py-2.5 px-4 bg-[#0A192F] hover:bg-[#0F223D] text-white text-xs font-bold uppercase tracking-wider transition-colors"
                 >
                   Charter
                 </button>
@@ -334,337 +356,284 @@ export default function Home({
         </div>
       </section>
 
-      {/* FOUR CORE MARITIME PILLARS */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-950 border border-cyan-800 text-cyan-400 text-xs font-semibold">
-            <ShieldCheck className="w-3.5 h-3.5" />
-            <span>Comprehensive Maritime Service Architecture</span>
-          </div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-            Integrated Solutions From Stem to Stern
-          </h2>
-          <p className="text-sm text-slate-400">
-            Engineered according to international maritime conventions, industry vetting criteria, and commercial chartering standards.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      {/* FOUR CORE MARITIME DIVISIONS */}
+      <section className="bg-white border-t border-slate-200 py-20 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto space-y-12">
           
-          {/* Pillar 1: Commercial Chartering */}
-          <div className="bg-gradient-to-br from-slate-900 to-slate-950 p-8 rounded-2xl border border-slate-800 hover:border-cyan-500/50 transition-all space-y-5">
-            <div className="w-12 h-12 rounded-xl bg-cyan-950 border border-cyan-800 text-cyan-400 flex items-center justify-center">
-              <Ship className="w-6 h-6" />
-            </div>
-            <div>
-              <span className="text-xs font-specs text-cyan-400 uppercase tracking-wider font-bold">
-                DIVISION 01
-              </span>
-              <h3 className="text-xl font-bold text-white mt-1">
-                Commercial Vessel Chartering & Fixtures
-              </h3>
-            </div>
-            <p className="text-xs text-slate-400 leading-relaxed">
-              Matching cargo requirements with optimal tonnage across dry bulk, crude oil, clean petroleum, and specialized chemical markets. Operating under BIMCO standard charter parties (Gencon, NYPE, Shelltime, BPVOY).
+          <div className="max-w-3xl space-y-2 border-b border-slate-200 pb-6">
+            <span className="text-xs uppercase tracking-[0.2em] text-[#9A7B4F] font-specs font-bold block">
+              INTEGRATED OPERATIONS ARCHITECTURE
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-[#0A192F] font-serif-maritime">
+              Comprehensive Maritime Services
+            </h2>
+            <p className="text-sm text-slate-600">
+              Structured to support shipowners, charterers, and industrial commodity shippers with complete operational assurance.
             </p>
-            <ul className="space-y-2 text-xs text-slate-300">
-              <li className="flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-cyan-400 shrink-0" />
-                <span>Voyage Charters (Spot Fixtures) & Freight Indication</span>
-              </li>
-              <li className="flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-cyan-400 shrink-0" />
-                <span>Period Time Charters & Bareboat Contracts</span>
-              </li>
-              <li className="flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-cyan-400 shrink-0" />
-                <span>Contracts of Affreightment (COA) for Industrial Shippers</span>
-              </li>
-              <li className="flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-cyan-400 shrink-0" />
-                <span>Laytime, Demurrage & Post-Fixture Commercial Management</span>
-              </li>
-            </ul>
-            <button
-              onClick={() => {
-                setCurrentTab('services');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-              }}
-              className="text-xs font-bold text-cyan-400 hover:text-cyan-300 inline-flex items-center gap-1.5"
-            >
-              <span>Explore Commercial Scope</span>
-              <ChevronRight className="w-3.5 h-3.5" />
-            </button>
           </div>
 
-          {/* Pillar 2: Technical Ship Management */}
-          <div className="bg-gradient-to-br from-slate-900 to-slate-950 p-8 rounded-2xl border border-slate-800 hover:border-cyan-500/50 transition-all space-y-5">
-            <div className="w-12 h-12 rounded-xl bg-blue-950 border border-blue-800 text-blue-400 flex items-center justify-center">
-              <SlidersHorizontal className="w-6 h-6" />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            
+            {/* Division 1 */}
+            <div className="bg-[#F8F9FA] border border-slate-200 p-8 space-y-5 hover:border-slate-400 transition-all">
+              <div className="w-12 h-12 bg-[#0A192F] text-[#C5A880] flex items-center justify-center">
+                <Ship className="w-6 h-6" />
+              </div>
+              <div>
+                <span className="text-xs font-specs text-[#9A7B4F] uppercase tracking-wider font-bold">
+                  DIVISION 01
+                </span>
+                <h3 className="text-xl font-bold text-[#0A192F] font-serif-maritime mt-1">
+                  Commercial Vessel Chartering & Fixtures
+                </h3>
+              </div>
+              <p className="text-xs text-slate-600 leading-relaxed">
+                Connecting global cargo principals with optimal tonnage across dry bulk, liquid energy, and containerized corridors under standard BIMCO charter parties (GENCON, NYPE, SHELLTIME, BPVOY).
+              </p>
+              <ul className="space-y-2 text-xs text-slate-700">
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                  <span>Spot Voyage Fixtures & Prompt Freight Indications</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                  <span>Period Time Charters & Bareboat Lease Arrangements</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                  <span>Industrial Contracts of Affreightment (COA)</span>
+                </li>
+              </ul>
+              <button
+                onClick={() => {
+                  setCurrentTab('services');
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+                className="text-xs font-bold text-[#0A192F] hover:text-[#0284C7] uppercase tracking-wider inline-flex items-center gap-1.5 pt-2"
+              >
+                <span>Read Full Chartering Scope</span>
+                <ChevronRight className="w-4 h-4" />
+              </button>
             </div>
-            <div>
-              <span className="text-xs font-specs text-blue-400 uppercase tracking-wider font-bold">
-                DIVISION 02
-              </span>
-              <h3 className="text-xl font-bold text-white mt-1">
-                Technical Fleet Superintendency & Maintenance
-              </h3>
-            </div>
-            <p className="text-xs text-slate-400 leading-relaxed">
-              Complete engineering oversight by certified Master Mariners and Chief Engineers. Implementing computerized Planned Maintenance Systems (PMS) to maximize vessel uptime, minimize off-hire, and control drydock budgets.
-            </p>
-            <ul className="space-y-2 text-xs text-slate-300">
-              <li className="flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-blue-400 shrink-0" />
-                <span>24/7 Technical Superintendency & Remote Diagnostic Support</span>
-              </li>
-              <li className="flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-blue-400 shrink-0" />
-                <span>Drydocking Tender Preparation, Yard Supervision & Cost Control</span>
-              </li>
-              <li className="flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-blue-400 shrink-0" />
-                <span>Condition Monitoring, Lube Oil Analysis & Hull Performance</span>
-              </li>
-              <li className="flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-blue-400 shrink-0" />
-                <span>Global Marine Spare Parts Procurement & Bunkering Quality Audit</span>
-              </li>
-            </ul>
-            <button
-              onClick={() => {
-                setCurrentTab('services');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-              }}
-              className="text-xs font-bold text-blue-400 hover:text-blue-300 inline-flex items-center gap-1.5"
-            >
-              <span>Explore Technical Scope</span>
-              <ChevronRight className="w-3.5 h-3.5" />
-            </button>
-          </div>
 
-          {/* Pillar 3: Offshore Marine Logistics */}
-          <div className="bg-gradient-to-br from-slate-900 to-slate-950 p-8 rounded-2xl border border-slate-800 hover:border-cyan-500/50 transition-all space-y-5">
-            <div className="w-12 h-12 rounded-xl bg-amber-950 border border-amber-800 text-amber-400 flex items-center justify-center">
-              <Compass className="w-6 h-6" />
+            {/* Division 2 */}
+            <div className="bg-[#F8F9FA] border border-slate-200 p-8 space-y-5 hover:border-slate-400 transition-all">
+              <div className="w-12 h-12 bg-[#0A192F] text-[#C5A880] flex items-center justify-center">
+                <SlidersHorizontal className="w-6 h-6" />
+              </div>
+              <div>
+                <span className="text-xs font-specs text-[#9A7B4F] uppercase tracking-wider font-bold">
+                  DIVISION 02
+                </span>
+                <h3 className="text-xl font-bold text-[#0A192F] font-serif-maritime mt-1">
+                  Technical Ship Superintendency & Engineering
+                </h3>
+              </div>
+              <p className="text-xs text-slate-600 leading-relaxed">
+                Complete engineering oversight led by career Chief Engineers and Master Mariners. Maintaining strict computerized Planned Maintenance Systems (PMS) to ensure 99.4% uptime and preserve asset capital value.
+              </p>
+              <ul className="space-y-2 text-xs text-slate-700">
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                  <span>24/7 Technical Superintendency & Diagnostic Support</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                  <span>Drydocking Tender Specifications & On-Site Supervision</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                  <span>Global Spare Parts Logistics & Bunker Quality Assurance</span>
+                </li>
+              </ul>
+              <button
+                onClick={() => {
+                  setCurrentTab('services');
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+                className="text-xs font-bold text-[#0A192F] hover:text-[#0284C7] uppercase tracking-wider inline-flex items-center gap-1.5 pt-2"
+              >
+                <span>Read Technical Scope</span>
+                <ChevronRight className="w-4 h-4" />
+              </button>
             </div>
-            <div>
-              <span className="text-xs font-specs text-amber-400 uppercase tracking-wider font-bold">
-                DIVISION 03
-              </span>
-              <h3 className="text-xl font-bold text-white mt-1">
-                Offshore Marine Support & Rig Towage
-              </h3>
-            </div>
-            <p className="text-xs text-slate-400 leading-relaxed">
-              Specialized offshore marine operations supporting oil & gas exploration, offshore wind, and marine construction. Operating DP2 AHTS, PSVs, tugs, and crew transfer vessels in the Arabian Gulf and international fields.
-            </p>
-            <ul className="space-y-2 text-xs text-slate-300">
-              <li className="flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-amber-400 shrink-0" />
-                <span>Anchor Handling & Heavy Jack-up Rig Relocation Towage</span>
-              </li>
-              <li className="flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-amber-400 shrink-0" />
-                <span>Platform Supply (Fuel, Potable Water, Drill Mud, Dry Bulk)</span>
-              </li>
-              <li className="flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-amber-400 shrink-0" />
-                <span>FiFi 1 External Firefighting & Emergency Oil Spill Standby</span>
-              </li>
-              <li className="flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-amber-400 shrink-0" />
-                <span>Harbor Towage, Barge Transport & Port Husbandry Agency</span>
-              </li>
-            </ul>
-            <button
-              onClick={() => {
-                setCurrentTab('services');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-              }}
-              className="text-xs font-bold text-amber-400 hover:text-amber-300 inline-flex items-center gap-1.5"
-            >
-              <span>Explore Offshore Scope</span>
-              <ChevronRight className="w-3.5 h-3.5" />
-            </button>
-          </div>
 
-          {/* Pillar 4: QHSE & Vetting */}
-          <div className="bg-gradient-to-br from-slate-900 to-slate-950 p-8 rounded-2xl border border-slate-800 hover:border-cyan-500/50 transition-all space-y-5">
-            <div className="w-12 h-12 rounded-xl bg-emerald-950 border border-emerald-800 text-emerald-400 flex items-center justify-center">
-              <ShieldCheck className="w-6 h-6" />
+            {/* Division 3 */}
+            <div className="bg-[#F8F9FA] border border-slate-200 p-8 space-y-5 hover:border-slate-400 transition-all">
+              <div className="w-12 h-12 bg-[#0A192F] text-[#C5A880] flex items-center justify-center">
+                <Compass className="w-6 h-6" />
+              </div>
+              <div>
+                <span className="text-xs font-specs text-[#9A7B4F] uppercase tracking-wider font-bold">
+                  DIVISION 03
+                </span>
+                <h3 className="text-xl font-bold text-[#0A192F] font-serif-maritime mt-1">
+                  Offshore Marine Support & Rig Towage
+                </h3>
+              </div>
+              <p className="text-xs text-slate-600 leading-relaxed">
+                Operating high-bollard-pull DP2 AHTS vessels and multi-purpose Platform Supply Vessels (PSVs) supporting offshore oil & gas rigs, marine construction, and offshore energy projects in the Arabian Gulf and international waters.
+              </p>
+              <ul className="space-y-2 text-xs text-slate-700">
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                  <span>Jack-up Rig Relocation & Anchor Spread Management</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                  <span>Supply of Drill Water, Fuel, Brine & Liquid Mud</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                  <span>Port Agency, Launch Husbandry & Crew Change Services</span>
+                </li>
+              </ul>
+              <button
+                onClick={() => {
+                  setCurrentTab('services');
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+                className="text-xs font-bold text-[#0A192F] hover:text-[#0284C7] uppercase tracking-wider inline-flex items-center gap-1.5 pt-2"
+              >
+                <span>Read Offshore Scope</span>
+                <ChevronRight className="w-4 h-4" />
+              </button>
             </div>
-            <div>
-              <span className="text-xs font-specs text-emerald-400 uppercase tracking-wider font-bold">
-                DIVISION 04
-              </span>
-              <h3 className="text-xl font-bold text-white mt-1">
-                QHSE, SIRE 2.0 & RightShip Vetting Compliance
-              </h3>
-            </div>
-            <p className="text-xs text-slate-400 leading-relaxed">
-              Uncompromising adherence to international maritime safety codes and major oil/commodity vetting standards. Protecting shipowners, charterers, and cargo interests against detentions and reputational risk.
-            </p>
-            <ul className="space-y-2 text-xs text-slate-300">
-              <li className="flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                <span>ISM Code, ISPS Code & MLC 2006 Audits and Certification</span>
-              </li>
-              <li className="flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                <span>OCIMF SIRE 2.0 Inspection Preparation & Root-Cause Remediation</span>
-              </li>
-              <li className="flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                <span>RightShip Safety Score (5-Star) & GHG Rating Optimization</span>
-              </li>
-              <li className="flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                <span>MARPOL Decarbonization Advisory (CII, EEXI & EU ETS Management)</span>
-              </li>
-            </ul>
-            <button
-              onClick={() => {
-                setCurrentTab('compliance');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-              }}
-              className="text-xs font-bold text-emerald-400 hover:text-emerald-300 inline-flex items-center gap-1.5"
-            >
-              <span>Explore Safety Charter</span>
-              <ChevronRight className="w-3.5 h-3.5" />
-            </button>
-          </div>
 
+            {/* Division 4 */}
+            <div className="bg-[#F8F9FA] border border-slate-200 p-8 space-y-5 hover:border-slate-400 transition-all">
+              <div className="w-12 h-12 bg-[#0A192F] text-[#C5A880] flex items-center justify-center">
+                <ShieldCheck className="w-6 h-6" />
+              </div>
+              <div>
+                <span className="text-xs font-specs text-[#9A7B4F] uppercase tracking-wider font-bold">
+                  DIVISION 04
+                </span>
+                <h3 className="text-xl font-bold text-[#0A192F] font-serif-maritime mt-1">
+                  QHSE, SIRE 2.0 & RightShip Vetting
+                </h3>
+              </div>
+              <p className="text-xs text-slate-600 leading-relaxed">
+                Uncompromising compliance with international maritime safety codes and charterer vetting criteria. Preparing vessels for OCIMF SIRE 2.0 inspections and maintaining RightShip 5-Star ratings.
+              </p>
+              <ul className="space-y-2 text-xs text-slate-700">
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                  <span>Document of Compliance (DOC) & Safety Management Systems</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                  <span>SIRE 2.0 Pre-Inspection Mock Audits & Root Cause Analysis</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                  <span>MARPOL Decarbonization Advisory (CII / EEXI / EU ETS)</span>
+                </li>
+              </ul>
+              <button
+                onClick={() => {
+                  setCurrentTab('compliance');
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+                className="text-xs font-bold text-[#0A192F] hover:text-[#0284C7] uppercase tracking-wider inline-flex items-center gap-1.5 pt-2"
+              >
+                <span>Read Safety & Vetting Charter</span>
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+
+          </div>
         </div>
       </section>
 
-      {/* EMBEDDED INTERACTIVE VOYAGE ESTIMATOR */}
-      <VoyageCalculator onOpenEnquiryWithData={onOpenEnquiryWithData} />
+      {/* VOYAGE CALCULATOR */}
+      <section className="bg-[#F8F9FA] py-16 border-t border-slate-200">
+        <VoyageCalculator onOpenEnquiryWithData={onOpenEnquiryWithData} />
+      </section>
 
-      {/* STRATEGIC MARITIME CORRIDORS & GLOBAL HUBS */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-8 sm:p-12 relative overflow-hidden">
-          <div className="max-w-2xl space-y-3 mb-8">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-950 border border-cyan-800 text-cyan-400 text-xs font-semibold">
-              <Globe2 className="w-3.5 h-3.5" />
-              <span>Global Operating Desks</span>
-            </div>
-            <h2 className="text-3xl font-extrabold text-white tracking-tight">
-              Strategic Gateway Desks & Marine Logistics
+      {/* STRATEGIC MARITIME DESKS & GLOBAL REACH */}
+      <section className="bg-white border-t border-slate-200 py-20 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto space-y-12">
+          
+          <div className="max-w-2xl space-y-2 border-b border-slate-200 pb-6">
+            <span className="text-xs uppercase tracking-[0.2em] text-[#9A7B4F] font-specs font-bold block">
+              OPERATIONAL ATTENDANCE
+            </span>
+            <h2 className="text-3xl font-extrabold text-[#0A192F] font-serif-maritime">
+              Strategic Gateway Desks
             </h2>
-            <p className="text-xs text-slate-400">
-              Positioned in the world's primary bunkering, chartering, and transshipment corridors to provide rapid physical and commercial attendance.
+            <p className="text-xs text-slate-600">
+              Immediate physical and commercial representation across primary global bunkering, transshipment, and chartering hubs.
             </p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="bg-slate-950 p-5 rounded-xl border border-slate-800/80 space-y-2">
-              <span className="text-[10px] uppercase font-specs text-cyan-400 font-bold block">HEADQUARTERS</span>
-              <h4 className="text-base font-bold text-white">Dubai Hub (UAE)</h4>
-              <p className="text-xs text-slate-400">
-                Commercial chartering desk, Arabian Gulf offshore operations, and bunker coordination.
+            <div className="p-6 bg-slate-50 border border-slate-200 space-y-2">
+              <span className="text-[10px] uppercase font-specs text-[#9A7B4F] font-bold block">HEADQUARTERS</span>
+              <h4 className="text-base font-bold text-[#0A192F] font-serif-maritime">Dubai Desk (UAE)</h4>
+              <p className="text-xs text-slate-600">
+                Executive management, commercial fixtures, Arabian Gulf offshore operations.
               </p>
-              <div className="text-[11px] text-cyan-300 font-specs pt-2">UTC+4 • 24/7 Response</div>
+              <div className="text-[11px] text-[#0A192F] font-specs font-semibold pt-2 border-t border-slate-200">UTC+4 • 24/7 Response</div>
             </div>
 
-            <div className="bg-slate-950 p-5 rounded-xl border border-slate-800/80 space-y-2">
-              <span className="text-[10px] uppercase font-specs text-cyan-400 font-bold block">EAST ASIA GATEWAY</span>
-              <h4 className="text-base font-bold text-white">Singapore Hub</h4>
-              <p className="text-xs text-slate-400">
-                Trans-Pacific tanker & bulker fixtures, Malacca Strait agency, and crew logistics.
+            <div className="p-6 bg-slate-50 border border-slate-200 space-y-2">
+              <span className="text-[10px] uppercase font-specs text-[#9A7B4F] font-bold block">EAST ASIA GATEWAY</span>
+              <h4 className="text-base font-bold text-white text-[#0A192F] font-serif-maritime">Singapore Hub</h4>
+              <p className="text-xs text-slate-600">
+                Pacific bulker and tanker fixtures, Malacca Strait port agency, bunker coordination.
               </p>
-              <div className="text-[11px] text-cyan-300 font-specs pt-2">UTC+8 • Port Agency Active</div>
+              <div className="text-[11px] text-[#0A192F] font-specs font-semibold pt-2 border-t border-slate-200">UTC+8 • Port Husbandry Active</div>
             </div>
 
-            <div className="bg-slate-950 p-5 rounded-xl border border-slate-800/80 space-y-2">
-              <span className="text-[10px] uppercase font-specs text-cyan-400 font-bold block">EUROPE & ATLANTIC</span>
-              <h4 className="text-base font-bold text-white">Rotterdam Desk</h4>
-              <p className="text-xs text-slate-400">
+            <div className="p-6 bg-slate-50 border border-slate-200 space-y-2">
+              <span className="text-[10px] uppercase font-specs text-[#9A7B4F] font-bold block">EUROPE & ATLANTIC</span>
+              <h4 className="text-base font-bold text-white text-[#0A192F] font-serif-maritime">Rotterdam Desk</h4>
+              <p className="text-xs text-slate-600">
                 North Sea clean petroleum trades, European terminal vetting, and EU ETS compliance.
               </p>
-              <div className="text-[11px] text-cyan-300 font-specs pt-2">UTC+1 • Commercial Vetting</div>
+              <div className="text-[11px] text-[#0A192F] font-specs font-semibold pt-2 border-t border-slate-200">UTC+1 • Commercial Vetting</div>
             </div>
 
-            <div className="bg-slate-950 p-5 rounded-xl border border-slate-800/80 space-y-2">
-              <span className="text-[10px] uppercase font-specs text-cyan-400 font-bold block">TECHNICAL HUB</span>
-              <h4 className="text-base font-bold text-white">Mumbai Operations</h4>
-              <p className="text-xs text-slate-400">
+            <div className="p-6 bg-slate-50 border border-slate-200 space-y-2">
+              <span className="text-[10px] uppercase font-specs text-[#9A7B4F] font-bold block">TECHNICAL HUB</span>
+              <h4 className="text-base font-bold text-white text-[#0A192F] font-serif-maritime">Mumbai Operations</h4>
+              <p className="text-xs text-slate-600">
                 Marine technical superintendency, drydock engineering teams, and STCW crew crewing.
               </p>
-              <div className="text-[11px] text-cyan-300 font-specs pt-2">UTC+5:30 • Engineering Desk</div>
+              <div className="text-[11px] text-[#0A192F] font-specs font-semibold pt-2 border-t border-slate-200">UTC+5:30 • Engineering Desk</div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* CHARTERER ENDORSEMENTS & CORPORATE TRUST */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="border border-slate-800 bg-slate-950/80 rounded-2xl p-8 sm:p-10">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="space-y-3">
-              <span className="text-amber-400 text-lg">★★★★★</span>
-              <p className="text-xs text-slate-300 italic leading-relaxed">
-                "GRAVITY SEA FLEETS fixed our 58,000 MT coal stem from Richards Bay to Mundra with flawless dispatch. Vessel gears and grabs were maintained to the highest Japanese standards, achieving record discharge rates."
-              </p>
-              <div className="text-xs text-slate-400">
-                <strong className="text-white block">Senior Chartering Manager</strong>
-                <span>Global Commodities Trading Conglomerate, Geneva</span>
-              </div>
-            </div>
-
-            <div className="space-y-3">
-              <span className="text-amber-400 text-lg">★★★★★</span>
-              <p className="text-xs text-slate-300 italic leading-relaxed">
-                "Their DP2 AHTS vessel GRAVITY SENTINEL executed our jack-up rig repositioning in the Arabian Gulf under extreme weather conditions without a single safety incident. Flawless dynamic positioning."
-              </p>
-              <div className="text-xs text-slate-400">
-                <strong className="text-white block">Offshore Marine Superintendent</strong>
-                <span>Major National Oil Company, UAE</span>
-              </div>
-            </div>
-
-            <div className="space-y-3">
-              <span className="text-amber-400 text-lg">★★★★★</span>
-              <p className="text-xs text-slate-300 italic leading-relaxed">
-                "In technical management, their superintendents managed our drydocking in Zhoushan with zero cost overruns and completed class renewal 3 days ahead of schedule. Truly professional partner."
-              </p>
-              <div className="text-xs text-slate-400">
-                <strong className="text-white block">Fleet Director</strong>
-                <span>Aegean Shipowners Alliance, Piraeus</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* FINAL HIGH-CONVERSION CTA */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-gradient-to-r from-cyan-900 via-blue-900 to-slate-900 rounded-3xl p-8 sm:p-12 border border-cyan-700/50 shadow-2xl relative overflow-hidden text-center sm:text-left flex flex-col sm:flex-row items-center justify-between gap-8">
-          <div className="space-y-3 max-w-xl">
-            <span className="text-xs uppercase font-specs tracking-wider text-cyan-300 font-bold">
-              COMMERCIAL CHARTERING & FLEET PARTNERSHIP
+      {/* HIGH-LEVEL COMMERCIAL RFP BANNER */}
+      <section className="bg-[#0A192F] text-white py-16 px-4 sm:px-6 lg:px-8 border-t border-slate-800">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8">
+          <div className="space-y-2 max-w-2xl">
+            <span className="text-xs uppercase tracking-[0.2em] text-[#C5A880] font-specs font-bold block">
+              COMMERCIAL CHARTERING & SUPERINTENDENCY
             </span>
-            <h2 className="text-2xl sm:text-4xl font-extrabold text-white tracking-tight">
-              Ready to Discuss Your Next Vessel Fixture or Technical RFP?
+            <h2 className="text-2xl sm:text-3xl font-extrabold font-serif-maritime">
+              Ready to Discuss a Vessel Fixture or Technical Management Tender?
             </h2>
-            <p className="text-xs sm:text-sm text-cyan-100/80">
+            <p className="text-xs sm:text-sm text-slate-300">
               Our chartering superintendents respond within 4 hours with vetted tonnage options, indicative freight estimates, and technical feasibility reports.
             </p>
           </div>
 
-          <div className="flex flex-col sm:flex-row items-center gap-3 shrink-0">
+          <div className="flex flex-col sm:flex-row items-center gap-4 shrink-0 w-full md:w-auto">
             <button
               onClick={onOpenEnquiry}
-              className="px-6 py-3.5 rounded-xl bg-white text-slate-950 hover:bg-cyan-50 font-bold text-xs uppercase tracking-wider shadow-lg transition-all flex items-center gap-2"
+              className="w-full sm:w-auto px-7 py-3.5 bg-[#C5A880] hover:bg-[#B39266] text-[#071324] font-bold text-xs uppercase tracking-wider transition-all shadow-md text-center"
             >
-              <FileText className="w-4 h-4 text-cyan-700" />
-              <span>Submit Commercial RFP</span>
+              Submit Commercial RFP
             </button>
             <a
               href="tel:+97148894500"
-              className="px-6 py-3.5 rounded-xl bg-slate-950/60 text-white hover:bg-slate-950 border border-white/20 font-semibold text-xs transition-all flex items-center gap-2"
+              className="w-full sm:w-auto px-6 py-3.5 border border-slate-400 hover:border-white text-white font-semibold text-xs uppercase tracking-wider transition-all text-center"
             >
-              <span>Call Duty Superintendent</span>
+              Call Operations Desk
             </a>
           </div>
         </div>
