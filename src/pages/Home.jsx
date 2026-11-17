@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import VesselImage from '../components/VesselImage';
 import { 
   Anchor, 
   Ship, 
@@ -254,9 +255,10 @@ export default function Home({
               <div>
                 {/* Vessel Image */}
                 <div className="relative aspect-video bg-slate-950 overflow-hidden">
-                  <img 
+                  <VesselImage 
                     src={vessel.imageUrl} 
                     alt={vessel.name} 
+                    vesselType={vessel.subType || vessel.type}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                   <div className="absolute top-3 left-3">

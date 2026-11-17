@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import VesselImage from '../components/VesselImage';
 import { 
   Search, 
   Filter, 
@@ -285,9 +286,10 @@ export default function Fleet({
               <div>
                 {/* Photo Header */}
                 <div className="relative aspect-video bg-slate-950 overflow-hidden cursor-pointer" onClick={() => onSelectVessel(vessel)}>
-                  <img
+                  <VesselImage
                     src={vessel.imageUrl}
                     alt={vessel.name}
+                    vesselType={vessel.subType || vessel.type}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                   <div className="absolute top-3 left-3 flex gap-2">

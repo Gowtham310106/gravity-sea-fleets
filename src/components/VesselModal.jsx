@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import VesselImage from './VesselImage';
 import { 
   X, 
   Printer, 
@@ -87,9 +88,10 @@ export default function VesselModal({ vessel, onClose, onEnquire }) {
             {/* Image Showcase */}
             <div className="lg:col-span-7 space-y-2">
               <div className="relative rounded-xl overflow-hidden aspect-video bg-slate-950 border border-slate-800 group">
-                <img 
+                <VesselImage 
                   src={images[activeImageIndex] || vessel.imageUrl} 
                   alt={vessel.name}
+                  vesselType={vessel.subType || vessel.type}
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent pointer-events-none" />

@@ -5,7 +5,7 @@ export const INITIAL_VESSELS = [
     name: "GRAVITY ENDEAVOUR",
     slug: "gravity-endeavour",
     type: "Bulk Carrier",
-    subType: "Ultramax Bulk Carrier",
+    subType: "Ultramax Geared Dry Bulker",
     dwt: 63500,
     grossTonnage: 36200,
     netTonnage: 21450,
@@ -18,16 +18,16 @@ export const INITIAL_VESSELS = [
     callSign: "V7A4921",
     classification: "DNV (Det Norske Veritas)",
     classNotation: "1A Bulk carrier, BC-A, ESP, GRAB(25), E0, BWM(T)",
-    loa: 199.98, // meters
-    beam: 32.24, // meters
-    summerDraft: 13.30, // meters
+    loa: 199.98,
+    beam: 32.24,
+    summerDraft: 13.30,
     depthMoulded: 19.15,
-    grainCapacity: 78500, // cbm
-    baleCapacity: 75200, // cbm
+    grainCapacity: 78500,
+    baleCapacity: 75200,
     holdsHatches: "5 Holds / 5 Hatches",
     cargoGear: "4 x 30.5t Electro-Hydraulic Cranes with 12m³ Peiner Grabs",
     mainEngine: "MAN B&W 6S50ME-B9.3 Tier III (7,820 kW)",
-    serviceSpeed: 13.8, // knots
+    serviceSpeed: 13.8,
     fuelConsumptionEco: "17.2 MT/day VLSFO at 12.5 kts (ballast)",
     iceClass: "1C (Light Ice)",
     operatingRegion: "Global Trading / Arabian Gulf - Far East Corridor",
@@ -35,11 +35,10 @@ export const INITIAL_VESSELS = [
     availabilityDate: "Immediate",
     availabilityUpdatedAt: "2026-11-15T08:00:00Z",
     publicationStatus: "Published",
-    imageUrl: "https://images.unsplash.com/photo-1559136555-9303baea8ebd?auto=format&fit=crop&w=1600&q=80",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/1/15/2024-09-11_HAPPINESS_BULKER_-_IMO_9919515_%E2%80%93_Port_Angeles_WA_USA.jpg",
     imageGallery: [
-      "https://images.unsplash.com/photo-1559136555-9303baea8ebd?auto=format&fit=crop&w=1600&q=80",
-      "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=1600&q=80",
-      "https://images.unsplash.com/photo-1505705694340-019e1e335916?auto=format&fit=crop&w=1600&q=80"
+      "https://upload.wikimedia.org/wikipedia/commons/1/15/2024-09-11_HAPPINESS_BULKER_-_IMO_9919515_%E2%80%93_Port_Angeles_WA_USA.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/f/f5/Bulk_carrier_Darya_Ganga_at_Alcoa_Jetty%2C_November_2022_16.jpg"
     ],
     features: [
       "Equipped with modern fuel-saving Becker Mewis Duct",
@@ -75,7 +74,7 @@ export const INITIAL_VESSELS = [
     depthMoulded: 21.20,
     grainCapacity: 0,
     baleCapacity: 0,
-    liquidCapacity: 128500, // cbm at 98%
+    liquidCapacity: 128500,
     holdsHatches: "12 Cargo Tanks (6 pairs) + 2 Slop Tanks",
     cargoGear: "3 x 3,000 m³/hr Steam Turbine Driven Cargo Pumps",
     mainEngine: "MAN B&W 6G60ME-C9.5 (11,400 kW)",
@@ -87,10 +86,9 @@ export const INITIAL_VESSELS = [
     availabilityDate: "2026-12-05",
     availabilityUpdatedAt: "2026-11-14T14:30:00Z",
     publicationStatus: "Published",
-    imageUrl: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=1600&q=80",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/3/3f/2022-09-04_01_ACADIAN_-_IMO_9298715_tanker_%E2%80%93_St._John%E2%80%99s_NL_Canada.jpg",
     imageGallery: [
-      "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=1600&q=80",
-      "https://images.unsplash.com/photo-1505705694340-019e1e335916?auto=format&fit=crop&w=1600&q=80"
+      "https://upload.wikimedia.org/wikipedia/commons/3/3f/2022-09-04_01_ACADIAN_-_IMO_9298715_tanker_%E2%80%93_St._John%E2%80%99s_NL_Canada.jpg"
     ],
     features: [
       "Inert Gas System & Crude Oil Washing (COW) fully certified",
@@ -126,7 +124,7 @@ export const INITIAL_VESSELS = [
     depthMoulded: 15.60,
     grainCapacity: 0,
     baleCapacity: 0,
-    liquidCapacity: 43200, // cbm
+    liquidCapacity: 43200,
     holdsHatches: "20 Duplex Stainless Steel SUS31803 Cargo Tanks",
     cargoGear: "20 x 300 m³/hr Framo Hydraulic Submerged Deepwell Pumps",
     mainEngine: "Mitsui-MAN B&W 6S46ME-B8.5 (6,850 kW)",
@@ -138,9 +136,9 @@ export const INITIAL_VESSELS = [
     availabilityDate: "2026-12-18",
     availabilityUpdatedAt: "2026-11-16T09:15:00Z",
     publicationStatus: "Published",
-    imageUrl: "https://images.unsplash.com/photo-1505705694340-019e1e335916?auto=format&fit=crop&w=1600&q=80",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/a/a1/Panagia_Lady%2C_chemical_tanker%2C_Digital_Transport_Limited%2C_IMO_9241085%2C_exiting_port_of_Mombasa.jpg",
     imageGallery: [
-      "https://images.unsplash.com/photo-1505705694340-019e1e335916?auto=format&fit=crop&w=1600&q=80"
+      "https://upload.wikimedia.org/wikipedia/commons/a/a1/Panagia_Lady%2C_chemical_tanker%2C_Digital_Transport_Limited%2C_IMO_9241085%2C_exiting_port_of_Mombasa.jpg"
     ],
     features: [
       "Complete 20-grade simultaneous cargo handling & segregation",
@@ -176,7 +174,7 @@ export const INITIAL_VESSELS = [
     depthMoulded: 8.50,
     grainCapacity: 0,
     baleCapacity: 0,
-    liquidCapacity: 1250, // Drill water / fuel / liquid mud
+    liquidCapacity: 1250,
     deckArea: "620 m² with 1,000t deck cargo capacity",
     bollardPull: "165 Metric Tonnes Continuous",
     cargoGear: "Rolls-Royce 400t Double Drum Waterfall Winch, Karm Fork 500t",
@@ -189,9 +187,9 @@ export const INITIAL_VESSELS = [
     availabilityDate: "Immediate",
     availabilityUpdatedAt: "2026-11-17T06:00:00Z",
     publicationStatus: "Published",
-    imageUrl: "https://images.unsplash.com/photo-1518241353330-0f7941c2d9b5?auto=format&fit=crop&w=1600&q=80",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/4/40/2022-08-21_01_HORIZON_ARCTIC_-_IMO_9732838.jpg",
     imageGallery: [
-      "https://images.unsplash.com/photo-1518241353330-0f7941c2d9b5?auto=format&fit=crop&w=1600&q=80"
+      "https://upload.wikimedia.org/wikipedia/commons/4/40/2022-08-21_01_HORIZON_ARCTIC_-_IMO_9732838.jpg"
     ],
     features: [
       "Dynamic Positioning Kongsberg DP-2 with DGPS, CyScan, and Laser fan",
@@ -208,7 +206,7 @@ export const INITIAL_VESSELS = [
     name: "GRAVITY HORIZON",
     slug: "gravity-horizon",
     type: "Bulk Carrier",
-    subType: "Kamsarmax Geared Dry Bulk Carrier",
+    subType: "Kamsarmax Gearless Bulk Carrier",
     dwt: 82500,
     grossTonnage: 44200,
     netTonnage: 27100,
@@ -238,9 +236,9 @@ export const INITIAL_VESSELS = [
     availabilityDate: "2026-11-28",
     availabilityUpdatedAt: "2026-11-16T12:00:00Z",
     publicationStatus: "Published",
-    imageUrl: "https://images.unsplash.com/photo-1542314831-c6a4d27a69bc?auto=format&fit=crop&w=1600&q=80",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/f/f5/Bulk_carrier_Darya_Ganga_at_Alcoa_Jetty%2C_November_2022_16.jpg",
     imageGallery: [
-      "https://images.unsplash.com/photo-1542314831-c6a4d27a69bc?auto=format&fit=crop&w=1600&q=80"
+      "https://upload.wikimedia.org/wikipedia/commons/f/f5/Bulk_carrier_Darya_Ganga_at_Alcoa_Jetty%2C_November_2022_16.jpg"
     ],
     features: [
       "Latest Aerofoil Rudder and Propeller Boss Cap Fins (PBCF)",
@@ -287,9 +285,9 @@ export const INITIAL_VESSELS = [
     availabilityDate: "Immediate",
     availabilityUpdatedAt: "2026-11-17T07:30:00Z",
     publicationStatus: "Published",
-    imageUrl: "https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&w=1600&q=80",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/7/72/Container_ship_Reecon_Whale_on_Black_Sea_near_Constan%C8%9Ba_Romania.jpg",
     imageGallery: [
-      "https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&w=1600&q=80"
+      "https://upload.wikimedia.org/wikipedia/commons/7/72/Container_ship_Reecon_Whale_on_Black_Sea_near_Constan%C8%9Ba_Romania.jpg"
     ],
     features: [
       "Self-sustained geared vessel suitable for shallow draft feeder ports",
@@ -324,7 +322,7 @@ export const INITIAL_VESSELS = [
     summerDraft: 6.70,
     depthMoulded: 8.00,
     deckArea: "840 m² clear cargo deck (5.0 t/m² loading)",
-    liquidCapacity: 1100, // fuel / potable water / mud / brine / dry bulk cement
+    liquidCapacity: 1100,
     cargoGear: "Cargo rail cranes 2 x 5t @ 15m, specialized cargo transfer pumps",
     mainEngine: "Diesel-Electric: 4 x Caterpillar 3512C (total 5,400 kWe) + 2 x Azimuth Thrusters",
     serviceSpeed: 13.0,
@@ -335,9 +333,9 @@ export const INITIAL_VESSELS = [
     availabilityDate: "2026-12-10",
     availabilityUpdatedAt: "2026-11-12T10:00:00Z",
     publicationStatus: "Published",
-    imageUrl: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=1600&q=80",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/a/a6/Anchor_Handling_Tug_Supply_Vessel_%28172383031%29.jpeg",
     imageGallery: [
-      "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=1600&q=80"
+      "https://upload.wikimedia.org/wikipedia/commons/a/a6/Anchor_Handling_Tug_Supply_Vessel_%28172383031%29.jpeg"
     ],
     features: [
       "Clean Design notation with battery hybrid energy storage system (ESS 600 kWh)",
@@ -383,9 +381,9 @@ export const INITIAL_VESSELS = [
     availabilityDate: "Immediate",
     availabilityUpdatedAt: "2026-11-16T16:00:00Z",
     publicationStatus: "Published",
-    imageUrl: "https://images.unsplash.com/photo-1505705694340-019e1e335916?auto=format&fit=crop&w=1600&q=80",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/1/12/Stenheim_%28IMO_9261114%29.jpg",
     imageGallery: [
-      "https://images.unsplash.com/photo-1505705694340-019e1e335916?auto=format&fit=crop&w=1600&q=80"
+      "https://upload.wikimedia.org/wikipedia/commons/1/12/Stenheim_%28IMO_9261114%29.jpg"
     ],
     features: [
       "Phenolic epoxy tank coating suitable for clean petroleum products and vegetable oils",
